@@ -1,24 +1,34 @@
 {
   "name": "@knowflow-ui/studio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "KnowFlow UI Studio — standalone component gallery (v0.1.0)",
+  "description": "KnowFlow UI Studio — V5 playground migration for @beiluol/knowflow-ui (v0.2.0)",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -p tsconfig.json --noEmit && vite build",
     "typecheck": "vue-tsc -p tsconfig.json --noEmit",
-    "preview": "vite preview"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preview": "vite preview",
+    "test:browser": "playwright test",
+    "dump:registry": "vitest run --config vitest.tools.config.ts"
   },
   "dependencies": {
+    "@beiluol/knowflow-ai": "workspace:*",
+    "@beiluol/knowflow-learning": "workspace:*",
     "@beiluol/knowflow-tokens": "workspace:*",
     "@beiluol/knowflow-ui": "workspace:*",
     "vue": "^3.4.38"
   },
   "devDependencies": {
+    "@playwright/test": "1.56.1",
     "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/test-utils": "^2.5.0",
+    "happy-dom": "^20.12.0",
     "typescript": "~6.0.2",
     "vite": "^8.1.1",
+    "vitest": "^4.1.11",
     "vue-tsc": "^3.3.5"
   }
 }

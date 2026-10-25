@@ -1,178 +1,197 @@
 <template>
-  <div class="shell">
-    <button
-      v-if="isMobile"
-      class="shell__drawer-toggle"
-      type="button"
-      aria-label="打开导航"
-      @click="navOpen = true"
-    >
-      <KfIcon name="menu" size="lg" />
-    </button>
+  <div class="st-shell">
+    <header class="st-topbar">
+      <button type="button" class="st-topbar__menu" aria-label="打开导航" @click="navOpen = true">
+        <KfIcon name="menu" :size="18" aria-hidden="true" />
+      </button>
 
-    <aside class="sidebar" :class="{ 'sidebar--open': navOpen }">
-      <div class="sidebar__brand">
-        <span class="sidebar__logo">KF</span>
-        <div class="sidebar__brand-text">
+      <a class="st-topbar__brand" href="#/" @click.prevent="go({ view: 'catalog' })">
+        <span class="st-topbar__logo" aria-hidden="true">KF</span>
+        <span class="st-topbar__brand-text">
           <strong>KnowFlow UI</strong>
-          <span>v0.1.0 · Studio</span>
-        </div>
-        <button
-          v-if="isMobile"
-          class="sidebar__close"
-          type="button"
-          aria-label="关闭导航"
-          @click="navOpen = false"
-        >
-          <KfIcon name="x" size="md" />
-        </button>
-      </div>
+          <span>Studio · v0.2.0</span>
+        </span>
+      </a>
 
-      <nav class="sidebar__nav" aria-label="组件导航">
-        <button
-          class="nav-item"
-          type="button"
-          :class="{ 'nav-item--active': route === 'overview' }"
-          @click="navigate('overview')"
-        >
-          <KfIcon name="home" size="md" />
-          <span>概览</span>
-        </button>
+      <button type="button" class="st-topbar__search" @click="paletteOpen = true">
+        <KfIcon name="search" :size="15" aria-hidden="true" />
+        <span>搜索 {{ ENTRIES.length }} 个条目 / {{ STORIES.length }} 个 Story</span>
+        <kbd class="st-topbar__kbd">⌘K</kbd>
+      </button>
 
-        <p class="nav-group">组 件</p>
+      <nav class="st-topbar__nav" aria-label="主导航">
         <button
-          v-for="story in stories"
-          :key="story.id"
-          class="nav-item"
+          v-for="item in NAV"
+          :key="item.view"
           type="button"
-          :class="{ 'nav-item--active': route === story.id }"
-          @click="navigate(story.id)"
+          class="st-topbar__link"
+          :class="{ 'st-topbar__link--active': route.view === item.view }"
+          :aria-current="route.view === item.view ? 'page' : undefined"
+          @click="go({ view: item.view })"
         >
-          <KfIcon :name="iconOf(story.id)" size="md" />
-          <span>{{ story.title }}</span>
-        </button>
-
-        <p class="nav-group">系 统</p>
-        <button
-          class="nav-item"
-          type="button"
-          :class="{ 'nav-item--active': route === 'tokens' }"
-          @click="navigate('tokens')"
-        >
-          <KfIcon name="palette" size="md" />
-          <span>Design Tokens</span>
-        </button>
-        <button
-          class="nav-item"
-          type="button"
-          :class="{ 'nav-item--active': route === 'roadmap' }"
-          @click="navigate('roadmap')"
-        >
-          <KfIcon name="route" size="md" />
-          <span>迁移路线</span>
+          {{ item.label }}
         </button>
       </nav>
 
-      <div class="sidebar__footer">
-        <span>{{ stories.length }} 个组件 · 78 图标</span>
-        <a href="https://github.com/beiluoL/knowflow-ui" target="_blank" rel="noreferrer">GitHub</a>
-      </div>
-    </aside>
+      <button
+        type="button"
+        class="st-icon-button"
+        :aria-label="isDark ? '切换到浅色' : '切换到深色'"
+        @click="toggleTheme"
+      >
+        <KfIcon :name="isDark ? 'sun' : 'moon'" :size="16" aria-hidden="true" />
+      </button>
+    </header>
 
-    <div v-if="isMobile && navOpen" class="shell__scrim" @click="navOpen = false" />
-
-    <div class="shell__main">
-      <header class="topbar">
-        <div class="topbar__left">
-          <span class="topbar__crumb">{{ currentTitle }}</span>
-          <span class="topbar__tag">v0.1.0</span>
+    <div class="st-shell__body">
+      <aside class="st-nav" aria-label="组件导航">
+        <div class="st-nav__search">
+          <KfIcon name="search" :size="14" aria-hidden="true" />
+          <input
+            v-model="filter"
+            class="st-nav__input"
+            type="search"
+            placeholder="过滤条目"
+            aria-label="过滤条目"
+          />
         </div>
-        <div class="topbar__right">
-          <button
-            class="theme-toggle"
-            type="button"
-            :aria-label="isDark ? '切换到浅色主题' : '切换到深色主题'"
-            @click="toggleTheme"
-          >
-            <KfIcon :name="isDark ? 'sun' : 'moon'" size="md" />
-            <span>{{ isDark ? 'Light' : 'Dark' }}</span>
+
+        <nav class="st-nav__scroll">
+          <section v-for="group in navGroups" :key="group.category" class="st-nav__group">
+            <p class="st-nav__category">
+              {{ group.category }}
+              <span class="st-nav__count">{{ group.entries.length }}</span>
+            </p>
+            <ul class="st-nav__list">
+              <li v-for="item in group.entries" :key="item.id">
+                <button
+                  type="button"
+                  class="st-nav__item"
+                  :class="{ 'st-nav__item--active': route.entryId === item.id }"
+                  :aria-current="route.entryId === item.id ? 'page' : undefined"
+                  @click="openEntry(item.id)"
+                >
+                  <span class="st-nav__dot" :class="`st-nav__dot--${item.status}`" aria-hidden="true" />
+                  <span class="st-nav__label">{{ item.title }}</span>
+                  <span class="st-nav__name">{{ item.name }}</span>
+                </button>
+              </li>
+            </ul>
+          </section>
+        </nav>
+
+        <footer class="st-nav__foot">
+          <button type="button" class="st-nav__foot-link" @click="go({ view: 'quality' })">
+            <KfIcon name="award" :size="14" aria-hidden="true" /> 质量总览
           </button>
-        </div>
-      </header>
+          <button type="button" class="st-nav__foot-link" @click="go({ view: 'tokens' })">
+            <KfIcon name="palette" :size="14" aria-hidden="true" /> 设计令牌
+          </button>
+        </footer>
+      </aside>
 
-      <main class="content">
-        <OverviewPage v-if="route === 'overview'" @navigate="navigate" />
-        <ComponentPage v-else-if="currentStory" :key="currentStory.id" :story="currentStory" />
-        <TokensPage v-else-if="route === 'tokens'" :theme="theme" />
-        <RoadmapPage v-else-if="route === 'roadmap'" />
+      <main class="st-main">
+        <CatalogPage v-if="route.view === 'catalog'" />
+        <ComponentPage v-else-if="route.view === 'component'" />
+        <QualityPage v-else-if="route.view === 'quality'" />
+        <TokensPage v-else />
       </main>
     </div>
+
+    <CommandPalette :open="paletteOpen" @close="paletteOpen = false" />
+
+    <KfDrawer
+      :open="navOpen"
+      placement="left"
+      title="组件导航"
+      :width="300"
+      @update:open="(value: boolean) => (navOpen = value)"
+    >
+      <nav class="st-nav st-nav--drawer">
+        <section v-for="group in navGroups" :key="group.category" class="st-nav__group">
+          <p class="st-nav__category">{{ group.category }}</p>
+          <ul class="st-nav__list">
+            <li v-for="item in group.entries" :key="item.id">
+              <button
+                type="button"
+                class="st-nav__item"
+                :class="{ 'st-nav__item--active': route.entryId === item.id }"
+                @click="openEntry(item.id)"
+              >
+                <span class="st-nav__dot" :class="`st-nav__dot--${item.status}`" aria-hidden="true" />
+                <span class="st-nav__label">{{ item.title }}</span>
+                <span class="st-nav__name">{{ item.name }}</span>
+              </button>
+            </li>
+          </ul>
+        </section>
+      </nav>
+    </KfDrawer>
   </div>
 </template>
 
 <script setup lang="ts">
+/**
+ * Studio 壳层：紧凑顶栏 + 左侧条目导航 + 中间内容区。
+ *
+ * 视觉沿用 KnowFlow（#3B6FE0 / #F7F8FA / 白卡 / Lucide），
+ * 但不复制业务样式表：所有颜色来自 --kf-* 令牌，因此 Light/Dark 只需切 data-theme。
+ */
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { KfIcon } from '@beiluol/knowflow-ui'
-import { useTheme } from './composables/useTheme'
-import { findStory, STORIES } from './stories/catalog'
-import OverviewPage from './pages/OverviewPage.vue'
+import { KfDrawer, KfIcon } from '@beiluol/knowflow-ui'
+import CatalogPage from './pages/CatalogPage.vue'
 import ComponentPage from './pages/ComponentPage.vue'
+import QualityPage from './pages/QualityPage.vue'
 import TokensPage from './pages/TokensPage.vue'
-import RoadmapPage from './pages/RoadmapPage.vue'
+import CommandPalette from './components/CommandPalette.vue'
+import { useHashRoute } from './composables/useHashRoute'
+import { useTheme } from './composables/useTheme'
+import { CATEGORIES, ENTRIES } from './registry/entries'
+import { STORIES } from './registry/stories'
 
-const { theme, isDark, toggleTheme } = useTheme()
-const stories = STORIES
+const { route, navigate } = useHashRoute()
+const { isDark, toggleTheme } = useTheme()
 
-const route = ref<string>('overview')
+const NAV = [
+  { view: 'catalog', label: '目录' },
+  { view: 'quality', label: '质量' },
+  { view: 'tokens', label: '令牌' },
+] as const
+
+const paletteOpen = ref(false)
 const navOpen = ref(false)
-const isMobile = ref(false)
+const filter = ref('')
 
-const currentStory = computed(() => findStory(route.value))
-const currentTitle = computed(() => {
-  if (route.value === 'overview') return '概览'
-  if (route.value === 'tokens') return 'Design Tokens'
-  if (route.value === 'roadmap') return '迁移路线'
-  return currentStory.value?.title ?? '未找到'
-})
+const navGroups = computed(() =>
+  CATEGORIES.map((category) => ({
+    category,
+    entries: ENTRIES.filter(
+      (entry) =>
+        entry.category === category &&
+        (!filter.value.trim() ||
+          `${entry.title} ${entry.name}`.toLowerCase().includes(filter.value.trim().toLowerCase())),
+    ),
+  })).filter((group) => group.entries.length > 0),
+)
 
-const ICON_BY_STORY: Record<string, string> = {
-  button: 'square',
-  icon: 'sparkles',
-  input: 'edit',
-  checkbox: 'check-square',
-}
-
-function iconOf(id: string): string {
-  return ICON_BY_STORY[id] ?? 'square'
-}
-
-function syncFromHash() {
-  const raw = window.location.hash.replace(/^#\/?/, '')
-  route.value = raw || 'overview'
-}
-
-function navigate(id: string) {
-  window.location.hash = `#/${id}`
-  route.value = id
+function go(next: { view: 'catalog' | 'quality' | 'tokens' }): void {
+  navigate({ ...next, entryId: '', storyId: '' })
   navOpen.value = false
 }
 
-let media: MediaQueryList | null = null
-function syncViewport() {
-  isMobile.value = window.innerWidth < 900
-  if (!isMobile.value) navOpen.value = false
+function openEntry(id: string): void {
+  navigate({ view: 'component', entryId: id, storyId: '', tab: 'preview' })
+  navOpen.value = false
 }
 
-onMounted(() => {
-  syncFromHash()
-  window.addEventListener('hashchange', syncFromHash)
-  syncViewport()
-  media = window.matchMedia('(max-width: 900px)')
-  media.addEventListener('change', syncViewport)
-})
+// 顶栏的 ⌘K 与全局快捷键合并到一处：避免每个页面各注册一次
+function onKeydown(event: KeyboardEvent): void {
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+    event.preventDefault()
+    paletteOpen.value = !paletteOpen.value
+  }
+}
 
-onBeforeUnmount(() => {
-  window.removeEventListener('hashchange', syncFromHash)
-  media?.removeEventListener('change', syncViewport)
-})
+onMounted(() => window.addEventListener('keydown', onKeydown))
+onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 </script>

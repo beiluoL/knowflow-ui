@@ -1,8 +1,8 @@
 /**
- * KfFormField 模块入口 —— 内部组件，**不从根入口导出**。
+ * KfFormField 模块入口。
  *
- * 保留 index.ts 是为了让内部目录结构与其它组件一致，且方便未来
- * 若决定公开时只需在 components/index.ts 加一行。
+ * v0.2.0 起公开：它是 KfInput / KfTextarea / KfSelect / KfNumberInput 的共同外壳，
+ * 宿主写自定义控件时也应该能用同一条轨道，否则每个业务表单都会重写一次 label/help/error。
  */
 export { default as KfFormField } from './KfFormField.vue'
-export type { KfFormFieldProps } from './types'
+export type { KfFormFieldProps, KfFormFieldSlots } from './types'

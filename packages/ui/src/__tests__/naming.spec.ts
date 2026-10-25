@@ -79,17 +79,22 @@ function templateClassNames(template: string): string[] {
 
 /** BEM 校验：block / block__element / block--modifier / block__element--modifier */
 function isBemCompliant(token: string): boolean {
-  const block = BLOCKS.filter(
-    (candidate) =>
-      token === candidate || token.startsWith(`${candidate}__`) || token.startsWith(`${candidate}--`),
-  ).sort((a, b) => b.length - a.length)[0]
+  // Vue <Transition> 按 name 生成 `.kf-x-enter-active`，无法写成 BEM；
+  // 这是框架契约而不是我们自定义的类名，因此单独放行这一种后缀模式。
+  const isTransitionSuffix = (rest: string): boolean => /^-(enter|leave)(-(active|from|to))?$/.test(rest)
+  const isBemSuffix = (rest: string): boolean =>
+    /^(__[a-z0-9]+(?:-[a-z0-9]+)*)?(--[a-z0-9]+(?:-[a-z0-9]+)*)?$/.test(rest)
 
-  if (!block) return false
+  const candidates = BLOCKS.filter(
+    (candidate) => token === candidate || token.startsWith(`${candidate}-`) || token.startsWith(`${candidate}__`),
+  ).sort((a, b) => b.length - a.length)
 
-  const rest = token.slice(block.length)
-  if (!rest) return true
-
-  return /^(__[a-z0-9]+(?:-[a-z0-9]+)*)?(--[a-z0-9]+(?:-[a-z0-9]+)*)?$/.test(rest)
+  // 逐个尝试最长前缀：`kf-input-group__addon` 会先命中 kf-input-group 而不是 kf-input
+  for (const block of candidates) {
+    const rest = token.slice(block.length)
+    if (!rest || isTransitionSuffix(rest) || isBemSuffix(rest)) return true
+  }
+  return false
 }
 
 /* ---------- 用例 ---------- */
@@ -116,8 +121,22 @@ describe('命名规范 · 文件与目录', () => {
     expect(missing).toEqual([])
   })
 
-  it('block 名单与实际组件一一对应', () => {
-    expect(BLOCKS.sort()).toEqual(['kf-button', 'kf-checkbox', 'kf-form-field', 'kf-icon', 'kf-input'])
+  it('block 名与组件文件一一对应，且不存在重复 block', () => {
+    // 不再硬编码组件数量：新增组件时这条仍然有效，但 block 撞名（例如 KfTab 与 KfTabs
+    // 同时存在导致 .kf-tabs__x 归错 block）会立刻暴露。
+    expect(new Set(BLOCKS).size).toBe(BLOCKS.length)
+    expect(BLOCKS).toEqual(
+      expect.arrayContaining([
+        'kf-button',
+        'kf-icon',
+        'kf-input',
+        'kf-checkbox',
+        'kf-form-field',
+        'kf-select',
+        'kf-dialog',
+        'kf-toast',
+      ]),
+    )
   })
 })
 
@@ -177,16 +196,18 @@ describe('命名规范 · CSS 命名空间与 BEM', () => {
 })
 
 describe('命名规范 · TypeScript 导出', () => {
-  it('四个公共组件以 Kf + PascalCase 导出，内部组件不导出', () => {
+  it('公共组件以 Kf + PascalCase 导出，且与全局注册表完全一致', () => {
     const isComponent = (value: unknown): boolean =>
       typeof value === 'object' && value !== null && ('render' in value || 'setup' in value || '__name' in value)
 
     const componentExports = Object.entries(publicApi)
       .filter(([key, value]) => /^Kf[A-Z]/.test(key) && isComponent(value))
       .map(([key]) => key)
+      .sort()
 
-    expect(componentExports.sort()).toEqual(['KfButton', 'KfCheckbox', 'KfIcon', 'KfInput'])
-    expect(componentExports).not.toContain('KfFormField')
+    // 单一事实来源：根入口导出的组件 == KF_COMPONENTS 里注册的组件。
+    // 少导一个（宿主 import 不到）或多导一个（未注册、文档对不上）都会失败。
+    expect(componentExports).toEqual(Object.keys(publicApi.KF_COMPONENTS).sort())
   })
 
   it('不以 K / Know / Flow 或无前缀导出组件', () => {
@@ -206,9 +227,12 @@ describe('命名规范 · TypeScript 导出', () => {
     expectTypeOf<KfCheckboxEmits<boolean>['update:modelValue']>().toEqualTypeOf<[value: boolean]>()
   })
 
-  it('插件与版本号同样从根入口导出', () => {
+  it('插件与版本号同样从根入口导出，标签名由注册表推导', () => {
     expect(typeof publicApi.KfPlugin.install).toBe('function')
-    expect(publicApi.version).toBe('0.1.0')
-    expect(publicApi.KF_TAGS).toEqual(['kf-button', 'kf-icon', 'kf-input', 'kf-checkbox'])
+    expect(publicApi.version).toBe('0.2.0')
+    const kebab = Object.keys(publicApi.KF_COMPONENTS).map((name) =>
+      name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase(),
+    )
+    expect([...publicApi.KF_TAGS].sort()).toEqual(kebab.sort())
   })
 })

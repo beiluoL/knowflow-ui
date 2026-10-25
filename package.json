@@ -1,6 +1,6 @@
 {
   "name": "knowflow-ui-monorepo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.7.0",
@@ -10,15 +10,25 @@
   "scripts": {
     "dev": "pnpm --filter @knowflow-ui/studio dev",
     "dev:studio": "pnpm --filter @knowflow-ui/studio dev",
-    "build": "pnpm run build:ui && pnpm run build:studio",
+    "build": "pnpm run build:ui && pnpm run build:ai && pnpm run build:learning && pnpm run build:studio",
     "build:ui": "pnpm --filter @beiluol/knowflow-ui build",
+    "build:ai": "pnpm --filter @beiluol/knowflow-ai build",
+    "build:learning": "pnpm --filter @beiluol/knowflow-learning build",
     "build:studio": "pnpm --filter @knowflow-ui/studio build",
-    "test": "pnpm --filter @beiluol/knowflow-ui test",
-    "typecheck": "pnpm --filter @beiluol/knowflow-ui typecheck && pnpm --filter @knowflow-ui/studio typecheck",
+    "test": "pnpm run test:ui && pnpm run test:ai && pnpm run test:learning && pnpm run test:studio",
+    "test:ui": "pnpm --filter @beiluol/knowflow-ui test",
+    "test:ai": "pnpm --filter @beiluol/knowflow-ai test",
+    "test:learning": "pnpm --filter @beiluol/knowflow-learning test",
+    "test:studio": "pnpm --filter @knowflow-ui/studio test",
+    "typecheck": "pnpm run typecheck:ui && pnpm run typecheck:ai && pnpm run typecheck:learning && pnpm run typecheck:studio",
+    "typecheck:ui": "pnpm --filter @beiluol/knowflow-ui typecheck",
+    "typecheck:ai": "pnpm --filter @beiluol/knowflow-ai typecheck",
+    "typecheck:learning": "pnpm --filter @beiluol/knowflow-learning typecheck",
+    "typecheck:studio": "pnpm --filter @knowflow-ui/studio typecheck",
     "icons:export": "node scripts/export-icons.mjs",
     "pack:ui": "node scripts/pack-ui.mjs",
     "verify:dist": "node scripts/check-dist.mjs",
     "verify:consumer": "node scripts/verify-consumer.mjs",
-    "verify": "pnpm run typecheck && pnpm run test && pnpm run build && pnpm run verify:dist && pnpm run verify:consumer"
+    "verify": "pnpm run typecheck && pnpm run test && pnpm run build && pnpm run verify:dist && pnpm run pack:ui && pnpm run verify:consumer"
   }
 }

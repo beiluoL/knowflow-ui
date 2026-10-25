@@ -1,0 +1,600 @@
+{
+  "source": "docs/component-playground/v5/COMPONENT_MATRIX.md",
+  "parsedAt": "2026-10-25T10:31:54.095Z",
+  "totals": {
+    "entries": 65,
+    "stories": 153,
+    "byStatus": {
+      "已接入真实组件": 29,
+      "仅有内部演示": 27,
+      "尚未实现": 9
+    }
+  },
+  "rows": [
+    {
+      "name": "Button",
+      "title": "按钮",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 15,
+      "sourceFile": "Button.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Button.vue"
+    },
+    {
+      "name": "Icon",
+      "title": "图标",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "Icon.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Icon.vue"
+    },
+    {
+      "name": "Input",
+      "title": "输入框",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 6,
+      "sourceFile": "Input.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Input.vue"
+    },
+    {
+      "name": "Textarea",
+      "title": "多行输入",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 6,
+      "sourceFile": "Textarea.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Textarea.vue"
+    },
+    {
+      "name": "Checkbox",
+      "title": "复选框",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 3,
+      "sourceFile": "Checkbox.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Checkbox.vue"
+    },
+    {
+      "name": "Radio",
+      "title": "单选组",
+      "category": "基础组件 P0",
+      "status": "仅有内部演示",
+      "stories": 3,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Switch",
+      "title": "开关",
+      "category": "基础组件 P0",
+      "status": "仅有内部演示",
+      "stories": 3,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Select",
+      "title": "选择器",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 6,
+      "sourceFile": "Select.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Select.vue"
+    },
+    {
+      "name": "DatePicker",
+      "title": "日期",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 4,
+      "sourceFile": "DatePicker.vue",
+      "sourcePath": "../../../frontend/src/components/ui/DatePicker.vue"
+    },
+    {
+      "name": "FormField",
+      "title": "表单轨道",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 3,
+      "sourceFile": "FormField.vue",
+      "sourcePath": "../../../frontend/src/components/ui/FormField.vue"
+    },
+    {
+      "name": "Dialog",
+      "title": "对话框",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 5,
+      "sourceFile": "AppDialog.vue",
+      "sourcePath": "../../../frontend/src/components/ui/AppDialog.vue"
+    },
+    {
+      "name": "Tooltip",
+      "title": "提示",
+      "category": "基础组件 P0",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Toast",
+      "title": "通知",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "ToastHost.vue",
+      "sourcePath": "../../../frontend/src/components/ui/ToastHost.vue"
+    },
+    {
+      "name": "Tabs",
+      "title": "标签页",
+      "category": "基础组件 P0",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Dropdown",
+      "title": "动作菜单",
+      "category": "基础组件 P0",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "ContextMenu.vue",
+      "sourcePath": "../../../frontend/src/components/ui/ContextMenu.vue"
+    },
+    {
+      "name": "Table",
+      "title": "表格",
+      "category": "工作台组件 P1",
+      "status": "仅有内部演示",
+      "stories": 4,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Pagination",
+      "title": "分页",
+      "category": "工作台组件 P1",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "Pagination.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Pagination.vue"
+    },
+    {
+      "name": "Tree",
+      "title": "树",
+      "category": "工作台组件 P1",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Drawer",
+      "title": "抽屉",
+      "category": "工作台组件 P1",
+      "status": "已接入真实组件",
+      "stories": 3,
+      "sourceFile": "AppDialog.vue",
+      "sourcePath": "../../../frontend/src/components/ui/AppDialog.vue"
+    },
+    {
+      "name": "Popover",
+      "title": "浮层",
+      "category": "工作台组件 P1",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Upload",
+      "title": "本地文件",
+      "category": "工作台组件 P1",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Badge",
+      "title": "徽标",
+      "category": "工作台组件 P1",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "Badge.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Badge.vue"
+    },
+    {
+      "name": "Card",
+      "title": "卡片",
+      "category": "工作台组件 P1",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "Card.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Card.vue"
+    },
+    {
+      "name": "Skeleton",
+      "title": "骨架屏",
+      "category": "工作台组件 P1",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "SkeletonList.vue",
+      "sourcePath": "../../../frontend/src/components/ui/SkeletonList.vue"
+    },
+    {
+      "name": "Empty",
+      "title": "空状态",
+      "category": "工作台组件 P1",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "EmptyState.vue",
+      "sourcePath": "../../../frontend/src/components/ui/EmptyState.vue"
+    },
+    {
+      "name": "Progress",
+      "title": "进度条",
+      "category": "工作台组件 P1",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "Progress.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Progress.vue"
+    },
+    {
+      "name": "Combobox",
+      "title": "组合搜索",
+      "category": "工作台组件 P1",
+      "status": "仅有内部演示",
+      "stories": 5,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "SearchInput",
+      "title": "搜索框",
+      "category": "工作台组件 P1",
+      "status": "仅有内部演示",
+      "stories": 5,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "AIChat",
+      "title": "AI对话",
+      "category": "AI与学习组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ScenarioPreview.vue",
+      "sourcePath": "../../../frontend/src/dev/ScenarioPreview.vue"
+    },
+    {
+      "name": "RAG",
+      "title": "检索引用",
+      "category": "AI与学习组件",
+      "status": "仅有内部演示",
+      "stories": 3,
+      "sourceFile": "ScenarioPreview.vue",
+      "sourcePath": "../../../frontend/src/dev/ScenarioPreview.vue"
+    },
+    {
+      "name": "Agent",
+      "title": "执行轨迹",
+      "category": "AI与学习组件",
+      "status": "仅有内部演示",
+      "stories": 4,
+      "sourceFile": "ScenarioPreview.vue",
+      "sourcePath": "../../../frontend/src/dev/ScenarioPreview.vue"
+    },
+    {
+      "name": "Flashcard",
+      "title": "闪卡",
+      "category": "AI与学习组件",
+      "status": "仅有内部演示",
+      "stories": 4,
+      "sourceFile": "ScenarioPreview.vue",
+      "sourcePath": "../../../frontend/src/dev/ScenarioPreview.vue"
+    },
+    {
+      "name": "SmartQuiz",
+      "title": "智能测验",
+      "category": "AI与学习组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ScenarioPreview.vue",
+      "sourcePath": "../../../frontend/src/dev/ScenarioPreview.vue"
+    },
+    {
+      "name": "Interview",
+      "title": "模拟面试",
+      "category": "AI与学习组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ScenarioPreview.vue",
+      "sourcePath": "../../../frontend/src/dev/ScenarioPreview.vue"
+    },
+    {
+      "name": "CodeBlock",
+      "title": "代码块",
+      "category": "AI与学习组件",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "ChatCodeBlock.vue",
+      "sourcePath": "../../../frontend/src/components/chat/ChatCodeBlock.vue"
+    },
+    {
+      "name": "SkeletonList",
+      "title": "骨架屏",
+      "category": "其他已有组件",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "SkeletonList.vue",
+      "sourcePath": "../../../frontend/src/components/ui/SkeletonList.vue"
+    },
+    {
+      "name": "AppDialog",
+      "title": "对话框",
+      "category": "其他已有组件",
+      "status": "已接入真实组件",
+      "stories": 2,
+      "sourceFile": "AppDialog.vue",
+      "sourcePath": "../../../frontend/src/components/ui/AppDialog.vue"
+    },
+    {
+      "name": "ToastHost",
+      "title": "通知",
+      "category": "其他已有组件",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "ToastHost.vue",
+      "sourcePath": "../../../frontend/src/components/ui/ToastHost.vue"
+    },
+    {
+      "name": "ConfirmDialog",
+      "title": "确认弹窗",
+      "category": "其他已有组件",
+      "status": "已接入真实组件",
+      "stories": 2,
+      "sourceFile": "ConfirmDialog.vue",
+      "sourcePath": "../../../frontend/src/components/ui/ConfirmDialog.vue"
+    },
+    {
+      "name": "ContextMenu",
+      "title": "上下文菜单",
+      "category": "其他已有组件",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "ContextMenu.vue",
+      "sourcePath": "../../../frontend/src/components/ui/ContextMenu.vue"
+    },
+    {
+      "name": "EmptyState",
+      "title": "空状态",
+      "category": "其他已有组件",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "EmptyState.vue",
+      "sourcePath": "../../../frontend/src/components/ui/EmptyState.vue"
+    },
+    {
+      "name": "ErrorState",
+      "title": "错误状态",
+      "category": "其他已有组件",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "ErrorState.vue",
+      "sourcePath": "../../../frontend/src/components/ui/ErrorState.vue"
+    },
+    {
+      "name": "AIComposer",
+      "title": "AI输入区",
+      "category": "AI与学习组件",
+      "status": "已接入真实组件",
+      "stories": 3,
+      "sourceFile": "AIComposer.vue",
+      "sourcePath": "../../../frontend/src/components/ai/AIComposer.vue"
+    },
+    {
+      "name": "MarkdownRenderer",
+      "title": "Markdown正文",
+      "category": "AI与学习组件",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "ChatMarkdownRenderer.vue",
+      "sourcePath": "../../../frontend/src/components/chat/ChatMarkdownRenderer.vue"
+    },
+    {
+      "name": "Tag",
+      "title": "Tag",
+      "category": "其他已有组件",
+      "status": "尚未实现",
+      "stories": 1,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Divider",
+      "title": "Divider",
+      "category": "其他已有组件",
+      "status": "尚未实现",
+      "stories": 1,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Typography",
+      "title": "Typography",
+      "category": "其他已有组件",
+      "status": "尚未实现",
+      "stories": 1,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Link",
+      "title": "Link",
+      "category": "其他已有组件",
+      "status": "尚未实现",
+      "stories": 1,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Breadcrumb",
+      "title": "Breadcrumb",
+      "category": "其他已有组件",
+      "status": "尚未实现",
+      "stories": 1,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Alert",
+      "title": "Alert",
+      "category": "其他已有组件",
+      "status": "尚未实现",
+      "stories": 1,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Loading",
+      "title": "Loading",
+      "category": "其他已有组件",
+      "status": "尚未实现",
+      "stories": 1,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "ReviewProgress",
+      "title": "ReviewProgress",
+      "category": "其他已有组件",
+      "status": "尚未实现",
+      "stories": 1,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "QuestionCard",
+      "title": "QuestionCard",
+      "category": "其他已有组件",
+      "status": "尚未实现",
+      "stories": 1,
+      "sourceFile": "ReferenceDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ReferenceDemos.vue"
+    },
+    {
+      "name": "Accordion",
+      "title": "折叠面板",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    },
+    {
+      "name": "Avatar",
+      "title": "头像",
+      "category": "扩展组件",
+      "status": "已接入真实组件",
+      "stories": 1,
+      "sourceFile": "Avatar.vue",
+      "sourcePath": "../../../frontend/src/components/ui/Avatar.vue"
+    },
+    {
+      "name": "ButtonGroup",
+      "title": "按钮组",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    },
+    {
+      "name": "Slider",
+      "title": "滑块",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    },
+    {
+      "name": "DataTable",
+      "title": "数据表格",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    },
+    {
+      "name": "InputGroup",
+      "title": "组合输入",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    },
+    {
+      "name": "NumberInput",
+      "title": "数字输入",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    },
+    {
+      "name": "TagsInput",
+      "title": "标签输入",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    },
+    {
+      "name": "CopyButton",
+      "title": "复制按钮",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    },
+    {
+      "name": "StatusIndicator",
+      "title": "状态指示",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    },
+    {
+      "name": "ResizablePanels",
+      "title": "可调面板",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    },
+    {
+      "name": "Toolbar",
+      "title": "工具栏",
+      "category": "扩展组件",
+      "status": "仅有内部演示",
+      "stories": 2,
+      "sourceFile": "ExtensionDemos.vue",
+      "sourcePath": "../../../frontend/src/dev/ExtensionDemos.vue"
+    }
+  ]
+}

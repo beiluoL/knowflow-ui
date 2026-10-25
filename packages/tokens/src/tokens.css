@@ -155,6 +155,57 @@
 }
 
 /* =====================================================================
+ * v0.2.0 组件层令牌
+ *
+ * 只新增「新组件确实需要、且 v0.1.0 没有等价物」的变量；
+ * 已有令牌一律复用，不另起一套同义命名（避免出现第二套主题系统）。
+ * ===================================================================== */
+:root {
+  /* 浮层与遮罩 */
+  --kf-overlay: rgba(15, 17, 21, 0.48);
+  --kf-menu-surface: var(--kf-popover);
+  --kf-menu-radius: var(--kf-radius-md);
+  --kf-menu-shadow: var(--kf-shadow-dropdown);
+  --kf-tooltip-surface: #1a1d23;
+  --kf-tooltip-foreground: #ffffff;
+
+  /* 中性强调面 */
+  --kf-surface-hover: var(--kf-primary-soft);
+  --kf-highlight: #c2410c;
+  --kf-highlight-subtle: #fff7ed;
+
+  /* 语义别名（组件内部只读这些，不再直接写字面色） */
+  --kf-success: var(--kf-state-success);
+  --kf-success-surface: var(--kf-success-subtle);
+  --kf-warning-color: var(--kf-state-warning);
+  --kf-warning-surface: var(--kf-warning-subtle);
+  --kf-danger: var(--kf-state-error);
+  --kf-danger-surface: var(--kf-danger-subtle);
+  --kf-info: var(--kf-state-info);
+  --kf-info-surface: var(--kf-primary-subtle);
+
+  /* 交互度量 */
+  --kf-focus-ring-width: 2px;
+  --kf-focus-ring-offset: 2px;
+  --kf-motion-fast: 120ms;
+  --kf-motion-base: 180ms;
+  --kf-z-overlay: 1200;
+  --kf-z-toast: 1300;
+
+  /* 控件尺寸（与 Button/Input 同一套节奏） */
+  --kf-control-height-sm: 32px;
+  --kf-control-height-md: 38px;
+  --kf-control-height-lg: 44px;
+  --kf-switch-width: 40px;
+  --kf-switch-height: 22px;
+  --kf-switch-thumb: 18px;
+  --kf-slider-track: 4px;
+  --kf-slider-thumb: 16px;
+  --kf-tag-radius: var(--kf-radius-sm);
+  --kf-card-radius: var(--kf-radius-md);
+}
+
+/* =====================================================================
  * Dark theme — 数值来自 KnowFlow style.css :root[data-theme='dark']
  * ===================================================================== */
 [data-theme='dark'] {
@@ -195,4 +246,10 @@
 
   --kf-shadow-card: 0 2px 8px 0 rgba(0, 0, 0, 0.32);
   --kf-shadow-dropdown: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  --kf-overlay: rgba(0, 0, 0, 0.62);
+  --kf-tooltip-surface: #2a2f38;
+  --kf-tooltip-foreground: #e6e8ec;
+  --kf-highlight: #fdba74;
+  --kf-highlight-subtle: #2e1c0b;
 }

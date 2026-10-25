@@ -43,7 +43,13 @@ export type KfInputEmits = {
 }
 
 /**
- * 插槽：KfInput 当前只接受默认插槽之外的 meta 扩展能力，
- * 由内部 KfFormField 提供；对外无具名插槽（prefix/suffix 由 props 提供图标）。
+ * 插槽：
+ *   - prefix / suffix：在输入框内部前后插入自定义内容（清空按钮、单位、快捷键提示）；
+ *     不传时分别回退到 prefixIconName / suffixIconName 的图标。
+ *   - meta：追加到字段下方说明区（由 KfFormField 提供）。
  */
-export type KfInputSlots = Record<string, never>
+export interface KfInputSlots {
+  prefix?: () => unknown
+  suffix?: () => unknown
+  meta?: () => unknown
+}

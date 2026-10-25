@@ -29,3 +29,8 @@ examples/vue-vite/node_modules/
 # Test / coverage
 coverage/
 examples/vue-vite/package-lock.json
+
+# Playwright run metadata（截图在 evidence/screens 里是要交付的，运行日志不是）
+docs/migration/v5-to-ui/evidence/browser-artifacts/
+test-results/
+playwright-report/

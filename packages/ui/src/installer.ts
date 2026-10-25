@@ -9,22 +9,112 @@
  * 也让「用了哪些组件」变得不可见。注册表显式声明，代价只有一行。
  *
  * Vue 的组件名解析规则保证：注册 `KfButton` 后，`<kf-button>` 与 `<KfButton>` 都可用。
+ * `KF_TAGS` 由注册表推导，因此不可能与 `KF_COMPONENTS` 漂移。
  */
 import type { App, Component, Plugin } from 'vue'
-import { KfButton, KfCheckbox, KfIcon, KfInput } from './components/index'
+import {
+  KfAccordion,
+  KfAccordionItem,
+  KfAlert,
+  KfAvatar,
+  KfBadge,
+  KfButton,
+  KfButtonGroup,
+  KfCard,
+  KfCheckbox,
+  KfCombobox,
+  KfConfirmDialog,
+  KfContextMenu,
+  KfCopyButton,
+  KfDatePicker,
+  KfDialog,
+  KfDivider,
+  KfDrawer,
+  KfEmptyState,
+  KfErrorState,
+  KfFormField,
+  KfIcon,
+  KfInput,
+  KfLink,
+  KfNumberInput,
+  KfPagination,
+  KfPopover,
+  KfProgress,
+  KfRadio,
+  KfRadioGroup,
+  KfSearchInput,
+  KfSelect,
+  KfSkeleton,
+  KfSlider,
+  KfStatusIndicator,
+  KfSwitch,
+  KfTable,
+  KfTabs,
+  KfTag,
+  KfTagsInput,
+  KfTextarea,
+  KfToast,
+  KfTooltip,
+  KfTree,
+  KfUpload,
+} from './components/index'
 
 /** 参与全局注册的组件表（唯一事实来源，新增组件只改这里） */
 export const KF_COMPONENTS = {
+  KfAccordion,
+  KfAccordionItem,
+  KfAlert,
+  KfAvatar,
+  KfBadge,
   KfButton,
+  KfButtonGroup,
+  KfCard,
+  KfCheckbox,
+  KfCombobox,
+  KfConfirmDialog,
+  KfContextMenu,
+  KfCopyButton,
+  KfDatePicker,
+  KfDialog,
+  KfDivider,
+  KfDrawer,
+  KfEmptyState,
+  KfErrorState,
+  KfFormField,
   KfIcon,
   KfInput,
-  KfCheckbox,
+  KfLink,
+  KfNumberInput,
+  KfPagination,
+  KfPopover,
+  KfProgress,
+  KfRadio,
+  KfRadioGroup,
+  KfSearchInput,
+  KfSelect,
+  KfSkeleton,
+  KfSlider,
+  KfStatusIndicator,
+  KfSwitch,
+  KfTable,
+  KfTabs,
+  KfTag,
+  KfTagsInput,
+  KfTextarea,
+  KfToast,
+  KfTooltip,
+  KfTree,
+  KfUpload,
 } as const
 
 export type KfComponentName = keyof typeof KF_COMPONENTS
 
-/** 全局注册后可直接在模板中使用的标签名（kebab-case） */
-export const KF_TAGS: string[] = ['kf-button', 'kf-icon', 'kf-input', 'kf-checkbox']
+/** 由组件名推导的模板标签名（kebab-case），与组件表永远一致 */
+function toKebab(name: string): string {
+  return name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+}
+
+export const KF_TAGS: string[] = Object.keys(KF_COMPONENTS).map(toKebab)
 
 export const KfPlugin: Plugin = {
   install(app: App): void {

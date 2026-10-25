@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@beiluol/knowflow-ui": "file:../../artifacts/beiluol-knowflow-ui-0.1.0.tgz",
+    "@beiluol/knowflow-ui": "file:../../artifacts/beiluol-knowflow-ui-0.2.0.tgz",
     "vue": "^3.4.38"
   },
   "devDependencies": {

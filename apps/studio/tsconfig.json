@@ -18,8 +18,18 @@
     "verbatimModuleSyntax": true,
     "noEmit": true,
     "paths": {
-      "@beiluol/knowflow-ui": ["../../packages/ui/src/index.ts"]
+      "@beiluol/knowflow-ui": ["../../packages/ui/src/index.ts"],
+      "@beiluol/knowflow-ai": ["../../packages/ai/src/index.ts"],
+      "@beiluol/knowflow-learning": ["../../packages/learning/src/index.ts"],
+      "@beiluol/knowflow-tokens": ["../../packages/tokens/src/index.ts"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "vite.config.ts", "env.d.ts"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "env.d.ts"
+  ]
 }

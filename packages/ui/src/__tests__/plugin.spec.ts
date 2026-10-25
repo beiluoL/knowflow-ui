@@ -42,7 +42,8 @@ describe('KfPlugin 全局注册', () => {
       expect(app.component(name), `未注册 ${name}`).toBeTruthy()
     }
     expect(app.component('KfButton')).toBe(KfButton)
-    expect(app.component('KfFormField')).toBeUndefined()
+    // v0.2.0 起 KfFormField 正式公开：宿主自定义控件需要同一条 label/help/error 轨道
+    expect(app.component('KfFormField')).toBeTruthy()
   })
 
   it('重复 install 不产生重复注册或报警（Vue 自身已做幂等）', () => {
@@ -55,7 +56,9 @@ describe('KfPlugin 全局注册', () => {
 
     // Vue 只提示“已应用”，不会重复执行 install
     expect(warn.mock.calls.flat().join(' ')).toContain('already been applied')
-    expect(Object.keys(app._context.components).filter((key) => key.startsWith('Kf'))).toHaveLength(4)
+    expect(
+      Object.keys(app._context.components).filter((key) => key.startsWith('Kf')),
+    ).toHaveLength(Object.keys(KF_COMPONENTS).length)
   })
 
   it('注册后 kebab 与 PascalCase 两种标签都能解析', () => {

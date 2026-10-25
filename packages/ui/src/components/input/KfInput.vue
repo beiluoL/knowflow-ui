@@ -12,7 +12,9 @@
       class="kf-input"
       :class="{ 'kf-input--error': !!error, 'kf-input--disabled': disabled, 'kf-input--readonly': readonly }"
     >
-      <KfIcon v-if="prefixIconName" :name="prefixIconName" :size="16" class="kf-input__icon" />
+      <slot name="prefix">
+        <KfIcon v-if="prefixIconName" :name="prefixIconName" :size="16" class="kf-input__icon" />
+      </slot>
       <input
         v-bind="controlAttrs"
         :id="inputId"
@@ -31,7 +33,9 @@
         @focus="$emit('focus', $event)"
         @blur="$emit('blur', $event)"
       />
-      <KfIcon v-if="suffixIconName" :name="suffixIconName" :size="16" class="kf-input__icon" />
+      <slot name="suffix">
+        <KfIcon v-if="suffixIconName" :name="suffixIconName" :size="16" class="kf-input__icon" />
+      </slot>
     </div>
   </KfFormField>
 </template>

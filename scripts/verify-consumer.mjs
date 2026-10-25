@@ -32,6 +32,17 @@ if (!tgz) {
 
 console.log(`[verify-consumer] 使用产物：artifacts/${tgz}`)
 
+// 示例的 file: 依赖写死了版本号，升级后容易指向不存在的 tgz。
+// 这里按实际产物名重写，保证「装的就是刚打出来的那个包」。
+const examplePkgPath = path.join(exampleDir, 'package.json')
+const examplePkg = JSON.parse(fs.readFileSync(examplePkgPath, 'utf8'))
+const expectedSpec = `file:../../artifacts/${tgz}`
+if (examplePkg.dependencies['@beiluol/knowflow-ui'] !== expectedSpec) {
+  examplePkg.dependencies['@beiluol/knowflow-ui'] = expectedSpec
+  fs.writeFileSync(examplePkgPath, `${JSON.stringify(examplePkg, null, 2)}\n`)
+  console.log(`[verify-consumer] 已把示例依赖指向 ${expectedSpec}`)
+}
+
 for (const target of ['node_modules', 'package-lock.json', 'pnpm-lock.yaml', 'dist']) {
   fs.rmSync(path.join(exampleDir, target), { recursive: true, force: true })
 }

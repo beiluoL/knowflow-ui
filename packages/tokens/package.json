@@ -1,0 +1,20 @@
+{
+  "name": "@beiluol/knowflow-tokens",
+  "version": "0.1.0",
+  "private": false,
+  "description": "KnowFlow UI design tokens (canonical --kf-* namespace + --kb-* compatibility bridge)",
+  "type": "module",
+  "license": "UNLICENSED",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./src/tokens.css",
+    "./kb-compat.css": "./src/kb-compat.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src"
+  ],
+  "sideEffects": [
+    "*.css"
+  ]
+}

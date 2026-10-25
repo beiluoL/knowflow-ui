@@ -1,0 +1,5 @@
+packages:
+  - 'packages/*'
+  - 'apps/*'
+# examples/vue-vite 刻意不加入 workspace：
+# 它是「外部开发者」消费场景，必须自己安装 pnpm pack 产物，不能共享 workspace 依赖。

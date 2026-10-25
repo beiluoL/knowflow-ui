@@ -1,0 +1,8 @@
+/* KnowFlow UI 样式入口
+ *
+ * 只引入设计令牌：组件样式全部内联在各自 SFC 的 scoped 块中，
+ * 不使用 Tailwind、不依赖宿主全局样式表，保证与 KnowFlow 主项目解耦。
+ *
+ * 消费方必须显式引入：import '@beiluol/knowflow-ui/style.css'
+ */
+@import '@beiluol/knowflow-tokens/tokens.css';

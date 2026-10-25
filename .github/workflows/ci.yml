@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# 只读权限：CI 不发布、不推送、不写仓库内容
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: typecheck · test · build · pack · consume
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 用 corepack 固定 pnpm 版本，避免依赖 action 的版本解析是否包含 pnpm 11
+      - name: Enable pnpm (corepack)
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.7.0 --activate
+          pnpm -v
+
+      - name: Install workspace deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck (ui + studio)
+        run: pnpm run typecheck
+
+      - name: Unit tests
+        run: pnpm run test
+
+      - name: Build (ui + studio)
+        run: pnpm run build
+
+      - name: Check dist (aliases / paths / secrets / vue runtime)
+        run: pnpm run verify:dist
+
+      - name: Pack ui package
+        run: pnpm run pack:ui
+
+      - name: Consumer verification (install tgz → typecheck → build)
+        run: pnpm run verify:consumer
+
+      - name: Upload pack artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: knowflow-ui-tarball
+          path: artifacts/*.tgz
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,24 @@
+{
+  "name": "@knowflow-ui/studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "KnowFlow UI Studio — standalone component gallery (v0.1.0)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -p tsconfig.json --noEmit && vite build",
+    "typecheck": "vue-tsc -p tsconfig.json --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@beiluol/knowflow-tokens": "workspace:*",
+    "@beiluol/knowflow-ui": "workspace:*",
+    "vue": "^3.4.38"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.7",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.1",
+    "vue-tsc": "^3.3.5"
+  }
+}

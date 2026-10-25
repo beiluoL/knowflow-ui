@@ -1,0 +1,345 @@
+/* Studio 壳层样式：左栏 + 顶栏 + 内容区（沿用 KnowFlow 视觉语言，不复制业务样式表） */
+
+:root {
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--kf-background);
+  color: var(--kf-foreground);
+  font-family: var(--kf-font-sans);
+  font-size: var(--kf-fs-body-md);
+  line-height: var(--kf-lh-body-md);
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--kf-space-4);
+  width: 224px;
+  flex: 0 0 224px;
+  height: 100vh;
+  padding: var(--kf-space-4) var(--kf-space-3);
+  background: var(--kf-sidebar);
+  border-right: 1px solid var(--kf-border);
+  overflow-y: auto;
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--kf-space-2);
+  padding: 0 4px var(--kf-space-3);
+  border-bottom: 1px solid var(--kf-border);
+}
+
+.sidebar__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--kf-radius-sm);
+  background: var(--kf-primary);
+  color: var(--kf-primary-foreground);
+  font-size: var(--kf-fs-caption);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.sidebar__brand-text {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.sidebar__brand-text strong {
+  font-size: var(--kf-fs-body-md);
+  font-weight: 600;
+  color: var(--kf-foreground);
+}
+
+.sidebar__brand-text span {
+  font-size: var(--kf-fs-xs);
+  color: var(--kf-muted-foreground);
+}
+
+.sidebar__close {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  color: var(--kf-muted-foreground);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--kf-radius-xs);
+}
+
+.sidebar__nav {
+  display: grid;
+  gap: 2px;
+  align-content: start;
+}
+
+.nav-group {
+  margin: var(--kf-space-3) 0 2px;
+  padding-left: 10px;
+  font-size: var(--kf-fs-xs);
+  letter-spacing: 0.08em;
+  color: var(--kf-muted-foreground);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--kf-space-2);
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--kf-radius-sm);
+  background: transparent;
+  color: var(--kf-sidebar-foreground);
+  font-family: inherit;
+  font-size: var(--kf-fs-body-sm);
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.16s;
+}
+
+.nav-item:hover {
+  background: var(--kf-muted);
+}
+
+.nav-item--active {
+  background: var(--kf-card);
+  color: var(--kf-primary);
+  box-shadow: var(--kf-shadow-card);
+}
+
+.nav-item:focus-visible {
+  outline: 2px solid var(--kf-ring);
+  outline-offset: 1px;
+}
+
+.sidebar__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: var(--kf-space-3);
+  border-top: 1px solid var(--kf-border);
+  font-size: var(--kf-fs-xs);
+  color: var(--kf-muted-foreground);
+}
+
+.sidebar__footer a {
+  margin-left: auto;
+  color: var(--kf-primary);
+  text-decoration: none;
+}
+
+.shell__main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--kf-space-3);
+  height: 56px;
+  padding: 0 var(--kf-space-5);
+  background: color-mix(in srgb, var(--kf-card) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--kf-border);
+}
+
+.topbar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--kf-space-2);
+  min-width: 0;
+}
+
+.topbar__crumb {
+  font-size: var(--kf-fs-body-sm);
+  font-weight: 500;
+  color: var(--kf-foreground);
+}
+
+.topbar__tag {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: var(--kf-radius-full);
+  background: var(--kf-primary-soft);
+  color: var(--kf-primary);
+  font-size: var(--kf-fs-xs);
+}
+
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--kf-space-2);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--kf-border);
+  border-radius: var(--kf-radius-sm);
+  background: var(--kf-card);
+  color: var(--kf-foreground);
+  font-family: inherit;
+  font-size: var(--kf-fs-body-sm);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  border-color: var(--kf-primary);
+  color: var(--kf-primary);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--kf-ring);
+  outline-offset: 2px;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.shell__drawer-toggle {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--kf-border);
+  border-radius: var(--kf-radius-sm);
+  background: var(--kf-card);
+  color: var(--kf-foreground);
+  cursor: pointer;
+}
+
+.shell__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--kf-foreground) 32%, transparent);
+}
+
+/* 预览容器通用布局（被 preview 组件复用） */
+.preview-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* 窄屏防溢出：长代码/长路径不参与父级 min-content 计算 */
+.code-block__body,
+.preview-stage__metrics,
+.gallery,
+.page__preview-grid {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.preview-stack {
+  display: grid;
+  gap: var(--kf-space-3);
+  width: 100%;
+  max-width: 420px;
+}
+
+.preview-stack--left {
+  justify-items: start;
+}
+
+.preview-stack__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--kf-space-2);
+  font-size: var(--kf-fs-xs);
+  color: var(--kf-muted-foreground);
+}
+
+.preview-stack__meta code {
+  font-family: var(--kf-font-mono);
+  padding: 1px 5px;
+  border-radius: var(--kf-radius-xs);
+  background: var(--kf-background);
+  color: var(--kf-foreground);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    z-index: 25;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: var(--kf-shadow-dropdown);
+  }
+
+  .sidebar--open {
+    transform: translateX(0);
+  }
+
+  .topbar {
+    padding-left: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-item,
+  .card,
+  .sidebar {
+    transition: none;
+  }
+}

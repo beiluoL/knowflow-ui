@@ -1,0 +1,198 @@
+/* =====================================================================
+ * KnowFlow UI — Design Tokens (canonical namespace: --kf-*)
+ *
+ * 来源：KnowFlow 项目 frontend/src/style.css 的 :root --kb-* 令牌
+ *      + frontend/src/styles/ui-tokens.css 的组件令牌。
+ * 迁移原则：
+ *   1. 数值与 KnowFlow 现行线上实现保持一致（迁移目标不是重设计）；
+ *   2. 组件只消费 --kf-*；--kb-* 兼容映射见 kb-compat.css；
+ *   3. 颜色/尺寸以外的业务令牌不复制（例如 notes-*、chapter-* 等业务尺寸）。
+ *
+ * 主题切换：<html data-theme="dark">。默认（无属性）为 light。
+ * ===================================================================== */
+
+:root {
+  /* ---------- Color: surfaces & text ---------- */
+  --kf-background: #f7f8fa;
+  --kf-foreground: #1a1d23;
+  --kf-card: #ffffff;
+  --kf-card-foreground: #1a1d23;
+  --kf-popover: #ffffff;
+  --kf-popover-foreground: #1a1d23;
+  --kf-sidebar: #f0f2f5;
+  --kf-sidebar-foreground: #374151;
+  --kf-muted: #e8ecf1;
+  --kf-muted-foreground: #6b7280;
+  --kf-border: #e2e6ec;
+
+  /* ---------- Color: brand ---------- */
+  --kf-primary: #3b6fe0;
+  --kf-primary-foreground: #ffffff;
+  --kf-primary-hover: #2f59b3;
+  --kf-primary-active: #234386;
+  --kf-primary-soft: rgba(59, 111, 224, 0.08);
+  --kf-primary-subtle: #eff4fe;
+  --kf-ring: #3b6fe0;
+
+  /* ---------- Color: semantic ---------- */
+  --kf-accent: #10b981;
+  --kf-accent-foreground: #ffffff;
+  --kf-success-subtle: #ecfdf5;
+  --kf-state-success: #047857;
+  --kf-warning: #f59e0b;
+  --kf-warning-foreground: #ffffff;
+  --kf-warning-subtle: #fffbeb;
+  --kf-state-warning: #b45309;
+  --kf-destructive: #ef4444;
+  --kf-destructive-foreground: #ffffff;
+  --kf-danger-text: #b91c1c;
+  --kf-danger-subtle: #fef2f2;
+  --kf-state-error: #b91c1c;
+  --kf-state-info: #2f59b3;
+
+  /* ---------- Radius ---------- */
+  --kf-radius-xs: 4px;
+  --kf-radius-sm: 6px;
+  --kf-radius-md: 10px;
+  --kf-radius-lg: 16px;
+  --kf-radius-xl: 20px;
+  --kf-radius-full: 999px;
+
+  /* ---------- Typography ---------- */
+  --kf-font-sans: 'Noto Sans SC', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --kf-font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace;
+
+  --kf-fs-display: 32px;
+  --kf-lh-display: 1.25;
+  --kf-fw-display: 700;
+  --kf-fs-h1: 28px;
+  --kf-lh-h1: 1.285714;
+  --kf-fw-h1: 600;
+  --kf-fs-h2: 24px;
+  --kf-lh-h2: 1.333333;
+  --kf-fw-h2: 600;
+  --kf-fs-h3: 20px;
+  --kf-lh-h3: 1.4;
+  --kf-fw-h3: 600;
+  --kf-fs-h4: 18px;
+  --kf-lh-h4: 1.444444;
+  --kf-fw-h4: 500;
+  --kf-fs-body-lg: 16px;
+  --kf-lh-body-lg: 1.75;
+  --kf-fs-body-md: 14px;
+  --kf-lh-body-md: 1.571429;
+  --kf-fs-body-sm: 13px;
+  --kf-lh-body-sm: 1.538462;
+  --kf-fs-caption: 12px;
+  --kf-lh-caption: 1.5;
+  --kf-fs-xs: 11px;
+  --kf-lh-xs: 1.454545;
+  --kf-fw-label: 500;
+
+  /* ---------- Spacing (4px grid) ---------- */
+  --kf-space-1: 4px;
+  --kf-space-2: 8px;
+  --kf-space-3: 12px;
+  --kf-space-4: 16px;
+  --kf-space-5: 20px;
+  --kf-space-6: 24px;
+  --kf-space-8: 32px;
+
+  /* ---------- Icon scale ---------- */
+  --kf-icon-xxs: 10px;
+  --kf-icon-xs: 12px;
+  --kf-icon-sm: 14px;
+  --kf-icon-md: 16px;
+  --kf-icon-lg: 18px;
+  --kf-icon-xl: 20px;
+  --kf-icon-2xl: 24px;
+  --kf-icon-3xl: 32px;
+
+  /* ---------- Shadow ---------- */
+  --kf-shadow-card: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
+  --kf-shadow-dropdown: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* ---------- Button ---------- */
+  --kf-button-height-sm: 32px;
+  --kf-button-height-md: 38px;
+  --kf-button-height-lg: 44px;
+  --kf-button-padding-sm: 12px;
+  --kf-button-padding-md: 16px;
+  --kf-button-padding-lg: 24px;
+  --kf-button-radius: var(--kf-radius-sm);
+  --kf-button-gap: var(--kf-space-2);
+  --kf-button-line-height: 20px;
+  --kf-button-icon-slot: 18px;
+  --kf-button-font-sm: var(--kf-fs-body-sm);
+  --kf-button-font-md: var(--kf-fs-body-md);
+  --kf-button-font-lg: var(--kf-fs-body-lg);
+  --kf-button-font-weight: var(--kf-fw-label);
+
+  /* ---------- Input / form field ---------- */
+  --kf-input-height: 44px;
+  --kf-field-radius: var(--kf-radius-md);
+  --kf-field-padding: 12px;
+  --kf-field-label-gap: 8px;
+  --kf-field-surface: var(--kf-muted);
+  --kf-field-hover: color-mix(in srgb, var(--kf-muted) 80%, var(--kf-border));
+  --kf-field-active: color-mix(in srgb, var(--kf-muted) 65%, var(--kf-border));
+  --kf-field-disabled: color-mix(in srgb, var(--kf-muted) 75%, var(--kf-card));
+  --kf-field-error-bg: color-mix(in srgb, var(--kf-destructive) 5%, var(--kf-muted));
+  --kf-field-placeholder: var(--kf-muted-foreground);
+  --kf-control-motion: 160ms;
+
+  /* ---------- Checkbox ---------- */
+  --kf-checkbox-size: 20px;
+  --kf-checkbox-radius: 3px;
+  --kf-checkbox-border-width: 1px;
+  --kf-checkbox-mark-size: 14px;
+  --kf-checkbox-gap: var(--kf-space-2);
+  --kf-checkbox-hit-size: 32px;
+  --kf-checkbox-touch-size: 44px;
+  --kf-checkbox-focus-width: 2px;
+  --kf-checkbox-focus-offset: 2px;
+}
+
+/* =====================================================================
+ * Dark theme — 数值来自 KnowFlow style.css :root[data-theme='dark']
+ * ===================================================================== */
+[data-theme='dark'] {
+  --kf-background: #0f1115;
+  --kf-foreground: #e6e8ec;
+  --kf-card: #1a1d23;
+  --kf-card-foreground: #e6e8ec;
+  --kf-popover: #1a1d23;
+  --kf-popover-foreground: #e6e8ec;
+  --kf-sidebar: #15171c;
+  --kf-sidebar-foreground: #c5cad3;
+  --kf-muted: #252932;
+  --kf-muted-foreground: #9aa1ac;
+  --kf-border: #2a2f38;
+
+  --kf-primary: #4f86f9;
+  --kf-primary-foreground: #0f1115;
+  --kf-primary-hover: #6b9bfa;
+  --kf-primary-active: #3d6fd6;
+  --kf-primary-soft: rgba(79, 134, 249, 0.16);
+  --kf-primary-subtle: #16233d;
+  --kf-ring: #4f86f9;
+
+  --kf-accent: #34d399;
+  --kf-accent-foreground: #0f1115;
+  --kf-success-subtle: #0f2e22;
+  --kf-state-success: #34d399;
+  --kf-warning: #fbbf24;
+  --kf-warning-foreground: #0f1115;
+  --kf-warning-subtle: #2e2309;
+  --kf-state-warning: #fbbf24;
+  --kf-destructive: #f8716e;
+  --kf-destructive-foreground: #0f1115;
+  --kf-danger-text: #f8716e;
+  --kf-danger-subtle: #331514;
+  --kf-state-error: #f8716e;
+  --kf-state-info: #7ba3f5;
+
+  --kf-shadow-card: 0 2px 8px 0 rgba(0, 0, 0, 0.32);
+  --kf-shadow-dropdown: 0 4px 12px rgba(0, 0, 0, 0.4);
+}

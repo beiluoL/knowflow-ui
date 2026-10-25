@@ -1,0 +1,111 @@
+/* =====================================================================
+ * KnowFlow UI — --kb-* compatibility bridge
+ *
+ * 用途：让仍在使用 KnowFlow 旧令牌名（--kb-*）的页面/组件在引入
+ *      KnowFlow UI 后继续取到同一套数值。
+ *
+ * 方向固定为「旧名 → 新名」：--kb-* = var(--kf-*)
+ * 反向映射（--kf-* = var(--kb-*）会导致新包被宿主主题劫持，禁止。
+ *
+ * 引入顺序：tokens.css → kb-compat.css（本文件不定义任何颜色值）。
+ * 仅做迁移期兼容，新代码请直接使用 --kf-*。
+ * ===================================================================== */
+
+:root {
+  /* surfaces & text */
+  --kb-background: var(--kf-background);
+  --kb-foreground: var(--kf-foreground);
+  --kb-card: var(--kf-card);
+  --kb-card-foreground: var(--kf-card-foreground);
+  --kb-popover: var(--kf-popover);
+  --kb-popover-foreground: var(--kf-popover-foreground);
+  --kb-sidebar: var(--kf-sidebar);
+  --kb-sidebar-foreground: var(--kf-sidebar-foreground);
+  --kb-muted: var(--kf-muted);
+  --kb-muted-foreground: var(--kf-muted-foreground);
+  --kb-border: var(--kf-border);
+  --kb-input: var(--kf-border);
+
+  /* brand */
+  --kb-primary: var(--kf-primary);
+  --kb-primary-foreground: var(--kf-primary-foreground);
+  --kb-primary-hover: var(--kf-primary-hover);
+  --kb-primary-active: var(--kf-primary-active);
+  --kb-primary-soft: var(--kf-primary-soft);
+  --kb-primary-subtle: var(--kf-primary-subtle);
+  --kb-ring: var(--kf-ring);
+
+  /* semantic */
+  --kb-accent: var(--kf-accent);
+  --kb-accent-foreground: var(--kf-accent-foreground);
+  --kb-success-subtle: var(--kf-success-subtle);
+  --kb-state-success: var(--kf-state-success);
+  --kb-warning: var(--kf-warning);
+  --kb-warning-foreground: var(--kf-warning-foreground);
+  --kb-warning-subtle: var(--kf-warning-subtle);
+  --kb-state-warning: var(--kf-state-warning);
+  --kb-destructive: var(--kf-destructive);
+  --kb-destructive-foreground: var(--kf-destructive-foreground);
+  --kb-danger-text: var(--kf-danger-text);
+  --kb-danger-subtle: var(--kf-danger-subtle);
+  --kb-state-error: var(--kf-state-error);
+  --kb-state-info: var(--kf-state-info);
+
+  /* radius / spacing / icon */
+  --kb-radius-sm: var(--kf-radius-sm);
+  --kb-radius-md: var(--kf-radius-md);
+  --kb-radius-lg: var(--kf-radius-lg);
+  --kb-radius-xl: var(--kf-radius-xl);
+  --kb-radius-full: var(--kf-radius-full);
+  --kb-space-1: var(--kf-space-1);
+  --kb-space-2: var(--kf-space-2);
+  --kb-space-3: var(--kf-space-3);
+  --kb-space-4: var(--kf-space-4);
+  --kb-space-6: var(--kf-space-6);
+  --kb-space-8: var(--kf-space-8);
+  --kb-icon-xxs: var(--kf-icon-xxs);
+  --kb-icon-xs: var(--kf-icon-xs);
+  --kb-icon-sm: var(--kf-icon-sm);
+  --kb-icon-md: var(--kf-icon-md);
+  --kb-icon-lg: var(--kf-icon-lg);
+  --kb-icon-xl: var(--kf-icon-xl);
+  --kb-icon-2xl: var(--kf-icon-2xl);
+  --kb-icon-3xl: var(--kf-icon-3xl);
+
+  /* typography */
+  --kb-fs-display: var(--kf-fs-display);
+  --kb-fs-h1: var(--kf-fs-h1);
+  --kb-fs-h2: var(--kf-fs-h2);
+  --kb-fs-h3: var(--kf-fs-h3);
+  --kb-fs-h4: var(--kf-fs-h4);
+  --kb-fs-body-lg: var(--kf-fs-body-lg);
+  --kb-fs-body-md: var(--kf-fs-body-md);
+  --kb-fs-body-sm: var(--kf-fs-body-sm);
+  --kb-fs-caption: var(--kf-fs-caption);
+  --kb-fs-xs: var(--kf-fs-xs);
+  --kb-lh-body-md: var(--kf-lh-body-md);
+  --kb-fw-label: var(--kf-fw-label);
+  --font-sans: var(--kf-font-sans);
+  --font-mono: var(--kf-font-mono);
+
+  /* components */
+  --kb-btn-height-sm: var(--kf-button-height-sm);
+  --kb-btn-height-md: var(--kf-button-height-md);
+  --kb-btn-height-lg: var(--kf-button-height-lg);
+  --kb-btn-padding-sm: var(--kf-button-padding-sm);
+  --kb-btn-padding-md: var(--kf-button-padding-md);
+  --kb-btn-padding-lg: var(--kf-button-padding-lg);
+  --kb-btn-radius: var(--kf-button-radius);
+  --kb-button-gap: var(--kf-button-gap);
+  --kb-button-line-height: var(--kf-button-line-height);
+  --kb-button-icon-slot: var(--kf-button-icon-slot);
+  --kb-input-height: var(--kf-input-height);
+  --kb-field-radius: var(--kf-field-radius);
+  --kb-field-padding: var(--kf-field-padding);
+  --kb-field-surface: var(--kf-field-surface);
+  --kb-checkbox-size: var(--kf-checkbox-size);
+  --kb-checkbox-radius: var(--kf-checkbox-radius);
+  --kb-checkbox-gap: var(--kf-checkbox-gap);
+  --kb-checkbox-hit-size: var(--kf-checkbox-hit-size);
+  --kb-checkbox-mark-size: var(--kf-checkbox-mark-size);
+}

@@ -1,0 +1,24 @@
+{
+  "name": "knowflow-ui-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @knowflow-ui/studio dev",
+    "dev:studio": "pnpm --filter @knowflow-ui/studio dev",
+    "build": "pnpm run build:ui && pnpm run build:studio",
+    "build:ui": "pnpm --filter @beiluol/knowflow-ui build",
+    "build:studio": "pnpm --filter @knowflow-ui/studio build",
+    "test": "pnpm --filter @beiluol/knowflow-ui test",
+    "typecheck": "pnpm --filter @beiluol/knowflow-ui typecheck && pnpm --filter @knowflow-ui/studio typecheck",
+    "icons:export": "node scripts/export-icons.mjs",
+    "pack:ui": "node scripts/pack-ui.mjs",
+    "verify:dist": "node scripts/check-dist.mjs",
+    "verify:consumer": "node scripts/verify-consumer.mjs",
+    "verify": "pnpm run typecheck && pnpm run test && pnpm run build && pnpm run verify:dist && pnpm run verify:consumer"
+  }
+}

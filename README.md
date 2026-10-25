@@ -30,8 +30,10 @@ v0.1.0 ships only four primitives — deliberately — to prove the whole pipeli
 | Input（v-model / label / error / help / 图标 / IME 安全） | ✅ v0.1.0 |
 | Checkbox（v-model / 半选 / 禁用 / 整行可点 / 键盘焦点） | ✅ v0.1.0 |
 | Light / Dark 主题（`data-theme="dark"`） | ✅ |
-| TypeScript 类型声明（`dist/index.d.ts`） | ✅ |
-| 独立 Studio（预览 / 属性 / 代码 / 令牌 / 实测尺寸） | ✅ |
+| TypeScript 类型声明（`dist/index.d.ts` + `KfXxxProps` / `KfXxxEmits`） | ✅ |
+| 全局注册 `KfPlugin`（注册后可直接写 `<kf-button>`） | ✅ |
+| 命名规范统一（`Kf` / `kf-` / `--kf-` + BEM） | ✅ 见 [NAMING_CONVENTIONS.md](NAMING_CONVENTIONS.md) |
+| 独立 Studio（预览 / 属性 / 代码 / 令牌 / 实测尺寸 / 命名与 API） | ✅ |
 | 产物级消费验证（tarball 安装 + 类型 + 构建 + 浏览器） | ✅ |
 | npm 发布 | ⛔ 未执行（见 [许可证](#10-许可证与发布状态)） |
 | 其余组件（Select / Table / Dialog / AI / 学习组件…） | 🕒 规划 |
@@ -51,18 +53,26 @@ knowflow-ui/
 ├── packages/
 │   ├── tokens/                  # 设计令牌：--kf-* 唯一来源 + --kb-* 兼容桥
 │   └── ui/                      # @beiluol/knowflow-ui
-│       ├── src/components/{button,icon,input,checkbox,form-field}
+│       ├── src/components/
+│       │   ├── index.ts         # 公共组件聚合（只列已公开组件）
+│       │   └── {button,icon,input,checkbox,form-field}/
+│       │       ├── KfXxx.vue    # 组件实现（scoped 样式）
+│       │       ├── types.ts     # KfXxxProps / KfXxxEmits
+│       │       └── index.ts     # 目录导出
+│       ├── src/installer.ts     # KfPlugin / KF_COMPONENTS / KF_TAGS
 │       ├── src/styles/index.css # 只引令牌，组件样式在各 SFC 的 scoped 块
-│       ├── src/__tests__/       # 42 个组件测试
+│       ├── src/__tests__/       # 67 个测试（含命名规范与插件注册守门）
 │       └── vite.config.ts
 ├── apps/studio/                 # 独立预览与规范中心（端口 5180）
 ├── examples/vue-vite/           # 外部消费示例（不在 workspace 内，装 tgz）
 ├── scripts/
 │   ├── export-icons.mjs         # 从原 Icon.vue 提取图标（迁移期工具）
 │   ├── pack-ui.mjs              # 构建 + pnpm pack → artifacts/
-│   ├── check-dist.mjs           # 产物泄漏/别名/密钥检查
+│   ├── check-dist.mjs           # 产物泄漏/别名/密钥/BEM/类型/emits 检查
 │   └── verify-consumer.mjs      # 隔离安装 + 类型 + 构建校验
 ├── docs/{architecture,migration,releases}
+├── NAMING_CONVENTIONS.md        # 正式命名规范
+├── NAMING_MIGRATION_REPORT.md   # 本次命名统一的迁移报告
 └── .github/workflows/ci.yml
 ```
 
@@ -79,15 +89,21 @@ npm i ./artifacts/beiluol-knowflow-ui-0.1.0.tgz
 
 ```ts
 import { KfButton, KfIcon, KfInput, KfCheckbox } from '@beiluol/knowflow-ui'
+import type { KfButtonProps, KfButtonEmits } from '@beiluol/knowflow-ui'
 import '@beiluol/knowflow-ui/style.css'
+
+// 可选：需要全局 kebab 标签时
+import { KfPlugin } from '@beiluol/knowflow-ui'
+app.use(KfPlugin)   // 之后 <kf-button> / <kf-input> … 无需再 import
 ```
 
 ```vue
 <template>
+  <!-- Node 名用 PascalCase，标签两种写法等价 -->
   <KfButton icon-name="check" @click="save">保存</KfButton>
-  <KfInput v-model="email" label="邮箱地址" placeholder="you@example.com" />
-  <KfCheckbox v-model="agree" label="同意条款" />
-  <KfIcon name="sparkles" size="lg" />
+  <kf-input v-model="email" label="邮箱地址" placeholder="you@example.com" />
+  <kf-checkbox v-model="agree" label="同意条款" />
+  <kf-icon name="sparkles" size="lg" />
 </template>
 ```
 
@@ -98,7 +114,7 @@ import '@beiluol/knowflow-ui/style.css'
 ```bash
 pnpm install      # Node ≥ 20.19，pnpm 11（corepack enable 即可）
 pnpm dev          # 启动 Studio → http://localhost:5180
-pnpm test         # 42 个组件测试
+pnpm test         # 67 个测试
 pnpm build        # 构建 packages/ui + Studio
 pnpm verify       # 类型 → 测试 → 构建 → 产物检查 → 消费验证（完整门禁）
 ```
@@ -117,6 +133,9 @@ pnpm verify       # 类型 → 测试 → 构建 → 产物检查 → 消费验�
 
 ## 6. 组件示例
 
+> 命名速查：JS 名 `KfButton` / 模板 `<kf-button>` / CSS `.kf-button__icon` / 变量 `--kf-*` /
+> 类型 `KfButtonProps`。完整规则与新增组件清单见 [NAMING_CONVENTIONS.md](NAMING_CONVENTIONS.md)。
+
 ### Button
 
 ```vue
@@ -127,6 +146,8 @@ pnpm verify       # 类型 → 测试 → 构建 → 产物检查 → 消费验�
 ```
 
 三档高度 32 / 38 / 44，文字 14px/500，图标 16px（lg 18px），图文间距 8px，圆角 6px。
+类名：`.kf-button` / `__icon` / `__label` / `--primary`、`--sm`、`--lg`、`--block`、`--icon-only`。
+事件：`click`。插槽：`default`。类型：`KfButtonProps` / `KfButtonEmits`。
 
 ### Icon
 
@@ -140,6 +161,7 @@ registerIcon('kf-logo', '<path d="M4 4h16v16H4z" />')  // 业务自定义图标
 ```
 
 尺寸阶梯：`xxs 10 / xs 12 / sm 14 / md 16 / lg 18 / xl 20 / 2xl 24 / 3xl 32`，也可直接传数字。
+类名：`.kf-icon` / `--img` / `--missing`。事件与插槽：无。类型：`KfIconProps`。
 
 ### Input
 
@@ -151,6 +173,8 @@ registerIcon('kf-logo', '<path d="M4 4h16v16H4z" />')  // 业务自定义图标
 
 浅灰表面 44px，默认无边框，聚焦不出现蓝/灰外框；`label`/`error`/`help` 通过 `id` + `aria-describedby` 关联；
 输入法组合期间不向父组件抛中间态。
+类名：`.kf-input`（表面）/ `.kf-input__control`（原生 input）/ `.kf-input__icon` / `.kf-input--error`。
+事件：`update:modelValue`、`focus`、`blur`。插槽：无。类型：`KfInputProps` / `KfInputEmits`。
 
 ### Checkbox
 
@@ -161,6 +185,14 @@ registerIcon('kf-logo', '<path d="M4 4h16v16H4z" />')  // 业务自定义图标
 ```
 
 20×20 方框、3px 圆角、8px 文字间距、32px 命中区（触摸 44px），键盘 Space 可切换。
+类名：`.kf-checkbox` / `__box` / `__input` / `__mark` / `__label` / `--disabled` / `--embedded`。
+事件：`update:modelValue`、`change`、`native-change`。插槽：`default`。类型：`KfCheckboxProps` / `KfCheckboxEmits`。
+
+### 命名与第三方库共存
+
+- 类名 `kf-`、变量 `--kf-`，与 `el-` / `n-` / `van-` 零重叠；
+- 样式全部 scoped，**没有**裸元素选择器（`button {}`），不会命中 Element Plus 内部结构；
+- 已用模拟 `ElButton` / `ElInput` 的测试用例验证同页共存（`src/__tests__/plugin.spec.ts`）。
 
 ## 7. Studio
 
@@ -169,7 +201,8 @@ pnpm dev     # http://localhost:5180
 ```
 
 包含：组件目录、实时预览、属性面板（改 prop 立即生效）、变体/尺寸/状态矩阵、Vue 代码示例与复制、
-Light/Dark、Design Tokens（读浏览器真实计算值）、源码路径定位、**真实 DOM 尺寸测量**。
+Light/Dark、Design Tokens（读浏览器真实计算值）、源码路径定位、**真实 DOM 尺寸测量**，
+以及每个组件的**命名与 API**（JS 名 / 模板标签 / CSS 类名 / 导出类型 / Events / Slots）。
 
 原 KnowFlow 的 `/dev/ui-components` 展示中心保持原样，与本 Studio 互不影响。
 
@@ -215,4 +248,6 @@ import '@beiluol/knowflow-tokens/kb-compat.css'
 
 ## 12. 贡献
 
-见 [CONTRIBUTING.md](CONTRIBUTING.md)。迁移细节与接口差异见 [COMPONENT_MIGRATION.md](COMPONENT_MIGRATION.md)。
+见 [CONTRIBUTING.md](CONTRIBUTING.md)。命名规则见 [NAMING_CONVENTIONS.md](NAMING_CONVENTIONS.md)；
+迁移细节与接口差异见 [COMPONENT_MIGRATION.md](COMPONENT_MIGRATION.md)；本次命名统一的改动清单与测试结果见
+[NAMING_MIGRATION_REPORT.md](NAMING_MIGRATION_REPORT.md)。

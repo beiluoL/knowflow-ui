@@ -17,6 +17,14 @@ export const iconStory: ComponentStory = {
   sourcePath: 'packages/ui/src/components/icon/KfIcon.vue',
   measureSelector: '.icon-preview__hero svg',
   migratedFrom: 'frontend/src/components/ui/Icon.vue（原文件 211 个内联分支）',
+  naming: {
+    js: 'KfIcon',
+    tag: '<kf-icon>',
+    css: '.kf-icon / --img / --missing',
+    types: 'KfIconProps',
+  },
+  events: [],
+  slots: [],
   props: [
     {
       name: 'name',

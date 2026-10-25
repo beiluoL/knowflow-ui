@@ -10,13 +10,13 @@
     ]"
     :style="($attrs.style as string | undefined)"
   >
-    <span class="kf-checkbox-box" :class="{ 'kf-checkbox-box-mixed': indeterminate }">
+    <span class="kf-checkbox__box" :class="{ 'kf-checkbox__box--mixed': indeterminate }">
       <input
         v-bind="inputAttrs"
         :id="controlId"
         v-model="model"
         type="checkbox"
-        class="kf-checkbox-input"
+        class="kf-checkbox__input"
         :value="value === undefined ? 'on' : value"
         :true-value="trueValue === undefined ? true : trueValue"
         :false-value="falseValue === undefined ? false : falseValue"
@@ -29,12 +29,18 @@
         v-if="indeterminate"
         name="minus"
         :size="14"
-        class="kf-checkbox-mark"
+        class="kf-checkbox__mark"
         aria-hidden="true"
       />
-      <KfIcon v-else name="check" :size="14" class="kf-checkbox-mark kf-checkbox-check" aria-hidden="true" />
+      <KfIcon
+        v-else
+        name="check"
+        :size="14"
+        class="kf-checkbox__mark kf-checkbox__mark--check"
+        aria-hidden="true"
+      />
     </span>
-    <span v-if="label || $slots.default" class="kf-checkbox-label"><slot>{{ label }}</slot></span>
+    <span v-if="label || $slots.default" class="kf-checkbox__label"><slot>{{ label }}</slot></span>
   </component>
 </template>
 
@@ -46,38 +52,25 @@
  *      与文字 8px 间距、整行可点（默认渲染 <label>）。
  * 语义：原生 input 承担键盘与表单语义（Tab / Space / 表单提交），
  *      焦点环只画在可见方框上，不使用全局 outline:none。
+ *
+ * 类名：.kf-checkbox（行）/ __box（方框）/ __input（原生框）/ __mark（勾或横线）/
+ *      __label（文字），修饰符 --embedded / --disabled / __box--mixed / __mark--check。
  */
 import { computed, useAttrs, useId } from 'vue'
 import KfIcon from '../icon/KfIcon.vue'
+import type { KfCheckboxEmits, KfCheckboxProps } from './types'
 
 defineOptions({ inheritAttrs: false })
 
-const props = withDefaults(
-  defineProps<{
-    /** v-model 值；数组/Set 场景由原生 checkbox 语义处理 */
-    modelValue?: T
-    /** 受控 checked（优先于 modelValue），用于纯展示态 */
-    checked?: boolean
-    label?: string
-    disabled?: boolean
-    /** 半选态：视觉显示横线，并设置 aria-checked="mixed" */
-    indeterminate?: boolean
-    /** 原生 value（数组收集时使用） */
-    value?: unknown
-    trueValue?: unknown
-    falseValue?: unknown
-    modelModifiers?: Record<string, boolean>
-    /** label：整行可点（默认）；span：嵌入列表行时避免嵌套 label */
-    as?: 'label' | 'span'
-  }>(),
-  { checked: undefined, label: '', disabled: false, indeterminate: false, as: 'label' },
-)
+const props = withDefaults(defineProps<KfCheckboxProps<T>>(), {
+  checked: undefined,
+  label: '',
+  disabled: false,
+  indeterminate: false,
+  as: 'label',
+})
 
-const emit = defineEmits<{
-  'update:modelValue': [value: T]
-  change: [checked: boolean]
-  'native-change': [event: Event]
-}>()
+const emit = defineEmits<KfCheckboxEmits<T>>()
 
 const attrs = useAttrs()
 const generatedId = `kf-checkbox-${useId()}`
@@ -131,7 +124,7 @@ function handleChange(event: Event) {
   min-height: var(--kf-checkbox-size, 20px);
 }
 
-.kf-checkbox-box {
+.kf-checkbox__box {
   position: relative;
   box-sizing: border-box;
   display: inline-flex;
@@ -150,16 +143,16 @@ function handleChange(event: Event) {
     border-color var(--kf-control-motion, 160ms),
     background-color var(--kf-control-motion, 160ms);
 }
-.kf-checkbox-box:has(input:checked),
-.kf-checkbox-box-mixed {
+.kf-checkbox__box:has(input:checked),
+.kf-checkbox__box--mixed {
   background: var(--kf-primary);
   border-color: var(--kf-primary);
 }
 
 /* 原生 input 透明覆盖在方框上：保留 Tab/Space/表单提交，视觉由方框承担 */
-.kf-checkbox-input,
-.kf-checkbox-input:focus,
-.kf-checkbox-input:focus-visible {
+.kf-checkbox__input,
+.kf-checkbox__input:focus,
+.kf-checkbox__input:focus-visible {
   position: absolute;
   inset: 0;
   opacity: 0;
@@ -180,7 +173,7 @@ function handleChange(event: Event) {
   cursor: inherit;
 }
 
-.kf-checkbox-mark {
+.kf-checkbox__mark {
   width: var(--kf-checkbox-mark-size, 14px);
   height: var(--kf-checkbox-mark-size, 14px);
   flex: none;
@@ -188,14 +181,14 @@ function handleChange(event: Event) {
   color: var(--kf-primary-foreground);
   pointer-events: none;
 }
-.kf-checkbox-check {
+.kf-checkbox__mark--check {
   visibility: hidden;
 }
-.kf-checkbox-box:has(input:checked) > .kf-checkbox-check {
+.kf-checkbox__box:has(input:checked) > .kf-checkbox__mark--check {
   visibility: visible;
 }
 
-.kf-checkbox-label {
+.kf-checkbox__label {
   min-width: 0;
   font-size: var(--kf-fs-body-md, 14px);
   font-weight: 400;
@@ -204,12 +197,12 @@ function handleChange(event: Event) {
   overflow-wrap: anywhere;
 }
 
-.kf-checkbox:hover:not(.kf-checkbox--disabled) .kf-checkbox-box {
+.kf-checkbox:hover:not(.kf-checkbox--disabled) .kf-checkbox__box {
   border-color: var(--kf-primary);
 }
 
 /* 键盘焦点只画在可见方框上；鼠标点击不出现焦点环 */
-.kf-checkbox-box:has(input:focus-visible:not(:disabled)) {
+.kf-checkbox__box:has(input:focus-visible:not(:disabled)) {
   outline: var(--kf-checkbox-focus-width, 2px) solid var(--kf-primary);
   outline-offset: var(--kf-checkbox-focus-offset, 2px);
   box-shadow: none;
@@ -218,16 +211,16 @@ function handleChange(event: Event) {
 .kf-checkbox--disabled {
   cursor: not-allowed;
 }
-.kf-checkbox--disabled .kf-checkbox-box {
+.kf-checkbox--disabled .kf-checkbox__box {
   background: var(--kf-muted);
   border-color: var(--kf-border);
 }
-.kf-checkbox--disabled .kf-checkbox-box:has(input:checked),
-.kf-checkbox--disabled .kf-checkbox-box-mixed {
+.kf-checkbox--disabled .kf-checkbox__box:has(input:checked),
+.kf-checkbox--disabled .kf-checkbox__box--mixed {
   background: var(--kf-muted-foreground);
   border-color: var(--kf-muted-foreground);
 }
-.kf-checkbox--disabled .kf-checkbox-label {
+.kf-checkbox--disabled .kf-checkbox__label {
   color: var(--kf-muted-foreground);
 }
 
@@ -243,27 +236,27 @@ function handleChange(event: Event) {
 }
 
 @media (forced-colors: active) {
-  .kf-checkbox-box {
+  .kf-checkbox__box {
     forced-color-adjust: none;
     background: Canvas;
     border-color: CanvasText;
   }
-  .kf-checkbox-box:has(input:checked),
-  .kf-checkbox-box-mixed {
+  .kf-checkbox__box:has(input:checked),
+  .kf-checkbox__box--mixed {
     background: Highlight;
     border-color: Highlight;
   }
-  .kf-checkbox-mark {
+  .kf-checkbox__mark {
     color: HighlightText;
   }
-  .kf-checkbox-box:has(input:focus-visible) {
+  .kf-checkbox__box:has(input:focus-visible) {
     outline: var(--kf-checkbox-focus-width, 2px) solid Highlight;
     outline-offset: var(--kf-checkbox-focus-offset, 2px);
   }
-  .kf-checkbox--disabled .kf-checkbox-box {
+  .kf-checkbox--disabled .kf-checkbox__box {
     border-color: GrayText;
   }
-  .kf-checkbox--disabled .kf-checkbox-label {
+  .kf-checkbox--disabled .kf-checkbox__label {
     color: GrayText;
   }
 }

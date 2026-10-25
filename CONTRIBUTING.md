@@ -4,20 +4,30 @@
 
 ## 1. 组件命名
 
+> 完整规范见 [NAMING_CONVENTIONS.md](NAMING_CONVENTIONS.md)，这里只列底线。改类名/加导出前先读那一页。
+
 | 项 | 规则 | 示例 |
 | --- | --- | --- |
-| 导出名 | `Kf` 前缀 + PascalCase | `KfButton`、`KfInput` |
+| 导出名 | `Kf` + PascalCase | `KfButton`、`KfInput` |
+| 模板标签 | `kf-` + kebab-case | `<kf-button>` |
 | 文件 | 与导出名一致 | `components/button/KfButton.vue` |
 | 目录 | 小写 kebab-case | `components/checkbox/` |
-| CSS 类 | `kf-<组件>` + BEM 修饰 | `.kf-button--primary`、`.kf-checkbox-box` |
-| 类型 | 独立 `types.ts`，不写在 SFC 里导出 | `ButtonVariant` |
+| CSS 类 | `kf-<组件>` + BEM（`__` / `--`） | `.kf-button--primary`、`.kf-checkbox__box` |
+| CSS 变量 | `--kf-` + kebab-case | `--kf-field-surface` |
+| Props / Emits 类型 | `Kf` + PascalCase + `Props` / `Emits` | `KfButtonProps`、`KfButtonEmits` |
+| 事件名 | Vue 原生约定，**不加** `kf` 前缀 | `click`、`update:modelValue` |
 
 为什么加 `Kf` 前缀：避免与宿主工程的 `Button`、`Icon` 以及原生标签重名；也避免和原 KnowFlow 的
 `kb-*` 体系混淆——两套东西可以同时存在于一个页面而互不覆盖。
 
+禁止：`K` / `Know` / `Flow` / 无前缀组件名，元素级单连字符类名（`.kf-checkbox-box`），事件前缀（`kfClick`）。
+
 ## 2. Props 设计
 
-- 一律使用 `withDefaults(defineProps<{...}>(), {...})`，容器型 prop 必须有默认值。
+- 一律使用 `withDefaults(defineProps<KfXxxProps>(), {...})`，类型写在同目录 `types.ts` 并导出，
+  不在 SFC 里内联匿名类型（否则消费者拿不到 `KfXxxProps`，d.ts 也没有稳定类型名）。
+- `defineEmits<KfXxxEmits>()` 同样用导入类型；**必须保持运行时 emits 声明**——否则父级监听器会落进
+  `attrs` 二次触发并绕过 `disabled` 守卫（已由 `button.spec.ts` 的回归用例守护）。
 - 布尔 prop 默认 `false`，命名用正向语义（`disabled` 而不是 `enabled`）。
 - 受控值优先 `modelValue` + `update:modelValue`，不要提供第二个真源。
 - 与原生属性同名的 prop（`disabled` / `readonly` / `required` / `type`）必须真的透传到原生元素。
@@ -63,14 +73,18 @@
 
 - 每个组件一个 `src/__tests__/<component>.spec.ts`，使用 `@vue/test-utils` + happy-dom。
 - 必测：默认渲染、每个变体/尺寸、disabled/readonly/required、v-model 往返、事件、a11y 属性、属性透传。
+- 改名/加组件时必须同步：
+  - `src/__tests__/naming.spec.ts`（扫描磁盘校验文件命名、BEM、`index.ts`、类型导出）；
+  - `src/__tests__/plugin.spec.ts`（新组件要在 `KF_COMPONENTS` / `KF_TAGS` 登记，kebab 标签可解析）；
+  - `scripts/check-dist.mjs` 的产物检查项。
 - 修 bug 必须先补一个会失败的用例，再修。
 - 禁止删除断言或改断言来制造通过。
 
 ## 9. 文档
 
-- 新增/修改组件需同步：Studio story（`apps/studio/src/stories/<id>.ts`）、`README.md` 示例、
-  `COMPONENT_MIGRATION.md` 的接口差异表。
-- Studio story 是"唯一事实来源"：属性表、代码示例、变体矩阵都从它驱动，不要在页面里另写一份。
+- 新增/修改组件需同步：Studio story（`apps/studio/src/stories/<id>.ts`，含 `naming` / `events` / `slots` 三个字段）、
+  `README.md` 示例、`COMPONENT_MIGRATION.md` 的接口差异表、必要时 `NAMING_CONVENTIONS.md`。
+- Studio story 是"唯一事实来源"：属性表、命名信息、代码示例、变体矩阵都从它驱动，不要在页面里另写一份。
 
 ## 10. PR 规范
 

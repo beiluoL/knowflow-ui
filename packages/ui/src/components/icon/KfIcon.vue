@@ -37,24 +37,15 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { getIconMarkup, type BuiltinIconName } from './registry'
-import { ICON_SIZE_PX, type IconSize } from './types'
+import { getIconMarkup } from './registry'
+import { ICON_SIZE_PX, type IconSize, type KfIconProps } from './types'
 
-const props = withDefaults(
-  defineProps<{
-    /** 图标名（内置名有类型提示，自定义图标需先 registerIcon） */
-    name: BuiltinIconName | (string & {})
-    /** 语义尺寸或像素数值，默认 md = 16px */
-    size?: IconSize | number
-    /** 颜色，缺省继承 currentColor */
-    color?: string
-    /** 装饰性图标（默认 true）：对屏幕阅读器隐藏；设 false 时必须提供 ariaLabel */
-    decorative?: boolean
-    /** 非装饰图标的可访问名称 */
-    ariaLabel?: string
-  }>(),
-  { size: 'md', color: '', decorative: true, ariaLabel: '' },
-)
+const props = withDefaults(defineProps<KfIconProps>(), {
+  size: 'md',
+  color: '',
+  decorative: true,
+  ariaLabel: '',
+})
 
 const isImageSource = computed(() => /^(data:|https?:\/\/|\/)/i.test(props.name))
 

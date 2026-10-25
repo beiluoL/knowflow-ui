@@ -22,8 +22,9 @@ packages/tokens  →  packages/ui  →  apps/studio
 ```
 src/index.ts
   ├─ import './styles/index.css'          → 解析 @beiluol/knowflow-tokens/tokens.css
-  ├─ components/**/Kf*.vue                → @vitejs/plugin-vue 编译
-  └─ export …
+  ├─ components/index.ts                  → 逐组件 index.ts → Kf*.vue
+  ├─ installer.ts                         → KfPlugin（KF_COMPONENTS / KF_TAGS）
+  └─ export …（显式具名导出，不用 export *）
 
 vite build (lib mode, es only)
   ├─ external: vue
@@ -38,9 +39,30 @@ vue-tsc -p tsconfig.build.json
 `vue-tsc` 生成的 `.vue.d.ts` 容易错位，导致消费方类型解析失败。单包 + 平铺 d.ts 更稳。
 tree-shaking 依赖 `sideEffects` 字段（仅 CSS 有副作用）与 ESM 静态结构。
 
+为什么根入口用显式具名导出而非 `export *`：公共 API 需要可审阅、可冻结；`export *` 会让
+"多导出了什么"变得不可见，也无法在 `dist/index.d.ts` 上做符号级断言。
+
+## 2.1 导出与注册
+
+```
+components/<name>/index.ts   ← 组件 + 本目录类型（KfXxxProps / KfXxxEmits）
+        ↓
+components/index.ts          ← 只聚合「已公开」组件（KfFormField 不在此列）
+        ↓
+index.ts                     ← 公共 API + version
+installer.ts                 ← KfPlugin：注册 KfButton/KfIcon/KfInput/KfCheckbox
+```
+
+- 按需导入：`import { KfButton } from '@beiluol/knowflow-ui'`，不触发全局注册，可直接 tree-shake。
+- 全局标签：`app.use(KfPlugin)` 后 Vue 的 `resolveComponent` 依次尝试
+  `kf-button → kfButton → KfButton`，因此 kebab 与 PascalCase 两种写法都可用。
+- 不做自动目录扫描注册：会引入构建期副作用、破坏 tree-shaking，并让依赖关系不可见。
+
 ## 3. 样式策略
 
 - 组件样式全部在 SFC `<style scoped>`，不产出全局类名污染。
+- 类名一律 `kf-` 前缀 + BEM：`.kf-input`（block）/ `.kf-input__control`（element）/ `.kf-input--error`（modifier）。
+- 不使用裸元素选择器（`button {}` / `input {}`），因此不会命中 Element Plus、Naive UI 等第三方组件内部。
 - 令牌是唯一可跨组件共享的东西，通过 `dist/style.css` 提供。
 - 消费方必须显式 `import '@beiluol/knowflow-ui/style.css'`；不做 JS 注入（避免 SSR 场景样式抖动）。
 - 主题切换靠 `<html data-theme="dark">`，不在组件内维护主题状态。
@@ -54,10 +76,14 @@ tree-shaking 依赖 `sideEffects` 字段（仅 CSS 有副作用）与 ESM 静态
 | `KfInput` | `<div class="kf-form-field">` | `modelValue/type/label/help/error/required/disabled/readonly/*IconName` | `label for`、`aria-invalid`、`aria-describedby` |
 | `KfCheckbox` | `<label>` 或 `<span>` | `modelValue/checked/label/disabled/indeterminate/as/value/trueValue/falseValue` | 原生 input、`aria-checked="mixed"`、焦点环 |
 
+类型契约：每个组件导出 `KfXxxProps` / `KfXxxEmits`（Checkbox 带泛型 `T`）。SFC 内用
+`withDefaults(defineProps<KfXxxProps>(), …)` 与 `defineEmits<KfXxxEmits>()`；已实测导入类型同样会生成
+运行时 `props` / `emits` 声明（否则监听器会落进 `attrs` 二次触发）。
+
 ## 5. Studio 数据流
 
 ```
-stories/<id>.ts  (props schema / examples / gallery / specs / measureSelector)
+stories/<id>.ts  (props schema / examples / gallery / specs / measureSelector / naming / events / slots)
         │
         ├─→ PropControls  ── patch(key,value) ──→ state (reactive)
         │                                              │
@@ -66,19 +92,24 @@ stories/<id>.ts  (props schema / examples / gallery / specs / measureSelector)
         └─→ gallery 用「同一份 preview + 局部 state 覆盖」渲染，不写第二套演示实现
 ```
 
-`measureSelector` 必须指向组件自身（`.kf-button`、`.kf-field`、`.kf-checkbox-box`、图标 `svg`），
+`measureSelector` 必须指向组件自身（`.kf-button`、`.kf-input`、`.kf-checkbox__box`、图标 `svg`），
 否则量到外层容器的继承样式，会显示"字重 400 / 背景透明"这类假数据。
+
+`naming` 字段驱动「命名与 API」区块（JS 名 / 模板标签 / CSS 类名 / 导出类型），`events` / `slots`
+驱动 API 表；三者与 `types.ts` 的导出名保持同源，避免文档与代码漂移。
 
 ## 6. 质量门禁
 
 | 门禁 | 命令 | 当前结果 |
 | --- | --- | --- |
 | 类型 | `pnpm typecheck`（ui + studio） | 0 error |
-| 单测 | `pnpm test` | 42 passed / 4 files |
-| 构建 | `pnpm build` | ui 30.8 kB JS + 17.8 kB CSS；studio 129.9 kB JS |
-| 产物检查 | `pnpm verify:dist` | 14 文件，无泄漏 |
-| 消费验证 | `pnpm verify:consumer` | tgz 21.5 kB，安装后 typecheck + build 通过 |
-| 浏览器 | 人工脚本（1440 / 390、Light/Dark） | Studio 54 项 + 消费示例 9 项 |
+| 单测 | `pnpm test` | 67 passed / 6 files |
+| 命名守门 | `pnpm test`（`naming.spec.ts`） | 11 项：文件命名 / `index.ts` / BEM / `kb-` 残留 / 变量命名空间 / 裸元素选择器 |
+| 注册与共存 | `pnpm test`（`plugin.spec.ts`） | 12 项：kebab 标签解析 / script setup 导入 + kebab 标签 / 按需导入 / 重复注册 / 与 El* 共存 |
+| 构建 | `pnpm build` | ui 32.7 kB JS + 18.4 kB CSS；studio 133.8 kB JS |
+| 产物检查 | `pnpm verify:dist` | 22 文件，无泄漏；含类名/类型/运行时 emits 断言 |
+| 消费验证 | `pnpm verify:consumer` | tgz 24.9 kB，安装后 typecheck + build 通过 |
+| 浏览器 | 脚本（1440 / 390、Light/Dark） | Studio 74 项（含计算样式回归）+ 消费示例 9 项 |
 
 ## 7. 已知边界
 

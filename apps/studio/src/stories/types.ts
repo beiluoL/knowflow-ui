@@ -57,6 +57,30 @@ export interface GalleryBlock {
   items: GalleryItem[]
 }
 
+/** 命名规范展示（与 NAMING_CONVENTIONS.md 一一对应） */
+export interface NamingSpec {
+  /** JS / TS 组件名 */
+  js: string
+  /** Vue 模板标签 */
+  tag: string
+  /** CSS 类名前缀与 BEM 形态 */
+  css: string
+  /** 导出的 Props / Emits 类型 */
+  types: string
+}
+
+export interface EventSpec {
+  name: string
+  /** 回调参数签名 */
+  payload: string
+  description: string
+}
+
+export interface SlotSpec {
+  name: string
+  description: string
+}
+
 export interface ComponentStory {
   id: 'button' | 'icon' | 'input' | 'checkbox'
   title: string
@@ -70,6 +94,12 @@ export interface ComponentStory {
   migratedFrom: string
   /** 真实测量目标选择器（相对主预览容器）：必须指向组件自身，而不是外层包装 */
   measureSelector: string
+  /** 命名规范（JS 名 / 模板标签 / CSS 前缀 / 类型名） */
+  naming: NamingSpec
+  /** 对外事件（名称遵循 Vue 约定，无 kf 前缀） */
+  events: EventSpec[]
+  /** 对外插槽 */
+  slots: SlotSpec[]
   props: PropSpec[]
   examples: StoryExample[]
   /** 变体 / 尺寸 / 状态矩阵：用同一份 preview 渲染器渲染，避免第二套演示实现 */

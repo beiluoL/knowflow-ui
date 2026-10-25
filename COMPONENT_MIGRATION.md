@@ -65,8 +65,8 @@ Demo-only 与未实现条目，**不等于 53 个可迁移的生产组件**。
 | 维度 | 原实现 | 新实现 | 说明 |
 | --- | --- | --- | --- |
 | 导入 | `@/components/ui/Icon.vue` | `../icon/KfIcon.vue` | 去掉 `@/` 别名 |
-| class | `kb-input w-full px-3 py-2 text-sm transition-colors duration-200` | 纯 `kf-input` | 去掉 Tailwind 依赖 |
-| 外壳样式 | 全局 `.kb-field`（`style.css`） | 组件内 scoped `.kf-field` | 消费方不必再导入宿主样式表 |
+| class | `kb-input w-full px-3 py-2 text-sm transition-colors duration-200` | `kf-input__control`（原生 input）+ `kf-input`（表面） | 去掉 Tailwind 依赖 |
+| 外壳样式 | 全局 `.kb-field`（`style.css`） | 组件内 scoped `.kf-input` | 消费方不必再导入宿主样式表；类名按 BEM 归位（表面 = block，原生 input = `__control`） |
 | 表面色 | `--kb-field-surface = #E8ECF1` | `--kf-field-surface`（同值） | 视觉一致 |
 | 高度 | `--kb-input-height: 44px` | `--kf-input-height: 44px` | 一致 |
 | 聚焦 | 仅表面变深，无外框 | 同 + 显式 `outline:0` 于内部 input | 不引入全局 `outline:none` |
@@ -82,16 +82,33 @@ Demo-only 与未实现条目，**不等于 53 个可迁移的生产组件**。
 
 | 维度 | 原实现 | 新实现 | 说明 |
 | --- | --- | --- | --- |
-| 样式位置 | `style.css` 全局（`.kb-checkbox*` 共 10 条规则） | 组件 scoped（`kf-checkbox*`） | 迁移中最大的解耦动作 |
+| 样式位置 | `style.css` 全局（`.kb-checkbox*` 共 10 条规则） | 组件 scoped（`.kf-checkbox` / `__box` / `__input` / `__mark` / `__label`） | 迁移中最大的解耦动作 |
 | 尺寸 | 20×20、3px 圆角、14px 标记、8px 间距、32px 命中区 | 同（改为 `--kf-checkbox-*`） | 数值一致 |
-| 焦点 | `.kb-checkbox-box:has(input:focus-visible)` | 同（scoped） | 键盘焦点环仍可见 |
-| 半选 | `.kb-checkbox-box-mixed` + Icon minus | 同 + `aria-checked="mixed"` | 补了 ARIA |
+| 焦点 | `.kb-checkbox-box:has(input:focus-visible)` | 同（scoped，`.kf-checkbox__box:has(input:focus-visible)`） | 键盘焦点环仍可见 |
+| 半选 | `.kb-checkbox-box-mixed` + Icon minus | `.kf-checkbox__box--mixed` + Icon minus + `aria-checked="mixed"` | 补了 ARIA |
 | 逻辑 | 原生 input + computed 代理（generic `T`） | 同 | 支持数组/Set/true-value |
 | 事件 | `update:modelValue`、`change`、`native-change` | 同 | 一致 |
 | 根节点 | `label` 或 `span`（`as`） | 同 | 嵌入已有可点行时用 `span` |
 
 **接口兼容性**：完全一致（`modelValue/checked/label/disabled/indeterminate/value/trueValue/falseValue/as`）。
 新增 `aria-checked="mixed"`，属于可访问性增强而非行为变更。
+
+---
+
+### 2.5 命名规范化（本次新增）
+
+四个组件原本已有 `Kf` 前缀，本次补齐的是**其余命名维度**：
+
+| 维度 | 状态 |
+| --- | --- |
+| 组件名 / 文件名 | 原本已合规（`KfButton.vue`），未改 |
+| CSS 类名 | 15 个非 BEM 类名改为 `block__element` / `block--modifier`（详见 [NAMING_MIGRATION_REPORT.md](NAMING_MIGRATION_REPORT.md)） |
+| Props / Emits 类型 | 从 SFC 内联抽出为 `KfXxxProps` / `KfXxxEmits` 并从根入口导出 |
+| 目录入口 | 每个组件目录新增 `index.ts`；新增 `components/index.ts` 聚合层 |
+| 全局注册 | 新增 `KfPlugin`（`KF_COMPONENTS` / `KF_TAGS`），使 `<kf-button>` 可解析 |
+| CSS 变量 | 未改（`--kf-field-*` 是共用表单令牌组，在 `--kf-` 命名空间内） |
+
+视觉与行为：属性值、令牌值、DOM 结构、ARIA 全部未变；由 Studio 浏览器回归（74 项）逐项核对计算样式。
 
 ---
 

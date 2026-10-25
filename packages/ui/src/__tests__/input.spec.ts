@@ -30,15 +30,15 @@ describe('KfInput', () => {
     const describedBy = input.attributes('aria-describedby') ?? ''
     expect(input.attributes('aria-invalid')).toBe('true')
     expect(describedBy).toContain('-error')
-    expect(wrapper.get('.kf-form-error').text()).toBe('格式不正确')
-    expect(wrapper.get('.kf-form-error').attributes('id')).toBe(describedBy.trim())
+    expect(wrapper.get('.kf-form-field__error').text()).toBe('格式不正确')
+    expect(wrapper.get('.kf-form-field__error').attributes('id')).toBe(describedBy.trim())
   })
 
   it('help 文本进入 aria-describedby', () => {
     const wrapper = mount(KfInput, { props: { label: '邀请码', help: '区分大小写' } })
     const input = wrapper.get('input')
     expect(input.attributes('aria-describedby')).toContain('-help')
-    expect(wrapper.get('.kf-form-help').text()).toBe('区分大小写')
+    expect(wrapper.get('.kf-form-field__help').text()).toBe('区分大小写')
   })
 
   it('required / disabled / readonly 透传原生属性', () => {
@@ -49,7 +49,7 @@ describe('KfInput', () => {
     expect(input.attributes('required')).toBeDefined()
     expect(input.attributes('disabled')).toBeDefined()
     expect(input.attributes('readonly')).toBeDefined()
-    expect(wrapper.get('.kf-field').classes()).toContain('kf-field--disabled')
+    expect(wrapper.get('.kf-input').classes()).toContain('kf-input--disabled')
   })
 
   it('原生属性透传（name / maxlength / autocomplete / placeholder）', () => {
@@ -95,7 +95,7 @@ describe('KfInput', () => {
     const wrapper = mount(KfInput, {
       props: { label: '搜索', prefixIconName: 'search', suffixIconName: 'check' },
     })
-    expect(wrapper.findAll('.kf-field__icon')).toHaveLength(2)
+    expect(wrapper.findAll('.kf-input__icon')).toHaveLength(2)
   })
 
   it('type 透传', () => {

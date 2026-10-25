@@ -71,6 +71,60 @@
       </div>
     </section>
 
+    <section class="page__section">
+      <h2 class="page__h2">命名与 API</h2>
+      <p class="page__section-desc">
+        导入名用 PascalCase、模板用 kebab-case，两者解析到同一组件；CSS 类名与变量统一 kf- 命名空间。
+      </p>
+
+      <div class="naming-grid">
+        <div class="naming-item">
+          <span class="naming-item__label">JS / TS</span>
+          <code>{{ story.naming.js }}</code>
+        </div>
+        <div class="naming-item">
+          <span class="naming-item__label">模板标签</span>
+          <code>{{ story.naming.tag }}</code>
+        </div>
+        <div class="naming-item">
+          <span class="naming-item__label">CSS 类名</span>
+          <span class="naming-item__codes">
+            <code v-for="part in cssTokens" :key="part">{{ part }}</code>
+          </span>
+        </div>
+        <div class="naming-item">
+          <span class="naming-item__label">导出类型</span>
+          <code>{{ story.naming.types }}</code>
+        </div>
+      </div>
+
+      <div class="api-grid">
+        <div class="api-col">
+          <h3 class="page__h3">导入与使用</h3>
+          <CodeBlock :code="usageSnippet" :title="`${story.title} · 命名规范`" />
+        </div>
+        <div class="api-col">
+          <h3 class="page__h3">Events</h3>
+          <p v-if="!story.events.length" class="page__hint">该组件不对外派发事件。</p>
+          <dl v-else class="api-list">
+            <div v-for="event in story.events" :key="event.name" class="api-list__row">
+              <dt><code>@{{ event.name }}</code></dt>
+              <dd>{{ event.description }}<code class="api-list__payload">{{ event.payload }}</code></dd>
+            </div>
+          </dl>
+
+          <h3 class="page__h3">Slots</h3>
+          <p v-if="!story.slots.length" class="page__hint">该组件不接受插槽。</p>
+          <dl v-else class="api-list">
+            <div v-for="slot in story.slots" :key="slot.name" class="api-list__row">
+              <dt><code>{{ slot.name }}</code></dt>
+              <dd>{{ slot.description }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
     <section class="page__section page__two-col">
       <div>
         <h2 class="page__h2">可访问性</h2>
@@ -109,10 +163,27 @@ const host = ref<HTMLElement | null>(null)
 const copiedPath = ref(false)
 
 const preview = computed(() => previewFor(props.story.id))
+/** CSS 类名拆成独立 chip：避免窄屏在连字符处把 --disabled 拆成 "--" / "disabled" */
+const cssTokens = computed(() => props.story.naming.css.split(' / '))
 const categoryTitle = computed(
   () => CATEGORIES.find((item) => item.id === props.story.category)?.title ?? '',
 )
 const { metrics, measure } = useElementMetrics(host, () => props.story.measureSelector)
+
+const usageSnippet = computed(() => {
+  const { js, tag } = props.story.naming
+  const selfClosing = tag.replace(/>$/, ' />')
+  return [
+    `// JS 名称：${js}　模板标签：${tag}`,
+    '<script setup lang="ts">',
+    `import { ${js} } from '@beiluol/knowflow-ui'`,
+    '</' + 'script>',
+    '',
+    '<template>',
+    `  ${selfClosing}`,
+    '</template>',
+  ].join('\n')
+})
 
 function reset() {
   for (const key of Object.keys(state)) delete state[key]
@@ -383,9 +454,95 @@ async function copyPath() {
   text-align: right;
   color: var(--kf-foreground);
 }
+.page__h3 {
+  margin: var(--kf-space-4) 0 var(--kf-space-2);
+  font-size: var(--kf-fs-body-md);
+  font-weight: var(--kf-fw-label);
+  color: var(--kf-foreground);
+}
+.naming-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--kf-space-3);
+}
+.naming-item {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: var(--kf-space-3);
+  border: 1px solid var(--kf-border);
+  border-radius: var(--kf-radius-sm);
+  background: var(--kf-background);
+}
+.naming-item__label {
+  font-size: var(--kf-fs-xs);
+  color: var(--kf-muted-foreground);
+}
+.naming-item__codes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  min-width: 0;
+}
+.naming-item__codes code {
+  white-space: nowrap;
+}
+.naming-item code {
+  font-family: var(--kf-font-mono);
+  font-size: var(--kf-fs-body-sm);
+  color: var(--kf-foreground);
+  overflow-wrap: break-word;
+}
+.api-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--kf-space-5);
+  margin-top: var(--kf-space-3);
+}
+.api-col {
+  min-width: 0;
+}
+.api-list {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.api-list__row {
+  display: grid;
+  gap: 2px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--kf-border);
+  font-size: var(--kf-fs-body-sm);
+  color: var(--kf-foreground);
+}
+.api-list dt {
+  min-width: 0;
+}
+.api-list dt code {
+  font-family: var(--kf-font-mono);
+  font-size: var(--kf-fs-body-sm);
+  color: var(--kf-primary);
+  overflow-wrap: anywhere;
+}
+.api-list dd {
+  margin: 0;
+  color: var(--kf-muted-foreground);
+  overflow-wrap: anywhere;
+}
+.api-list__payload {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: var(--kf-radius-xs);
+  background: var(--kf-background);
+  color: var(--kf-foreground);
+  font-family: var(--kf-font-mono);
+  font-size: var(--kf-fs-xs);
+}
 @media (max-width: 1024px) {
   .page__preview-grid,
-  .page__two-col {
+  .page__two-col,
+  .api-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }

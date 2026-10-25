@@ -46,3 +46,17 @@
 
 只迁 4 个：Button（样式最干净）、Icon（纯函数式）、Input（有 label/a11y 轨道）、Checkbox（视觉全在全局表里，
 迁移收益最大）。这四个覆盖了「纯展示 / 图标 / 表单输入 / 表单选择」四类典型结构，足以验证架构。
+
+## 4. 命名映射（已迁移组件）
+
+原项目组件无统一前缀（`Button.vue` / `Input.vue` …，import 时按文件名使用），新库统一为 `Kf` 前缀：
+
+| 原项目用法 | 新库 JS / TS | 新库模板标签 | 新库 CSS block | 原项目 CSS |
+| --- | --- | --- | --- | --- |
+| `import Button from '@/components/ui/Button.vue'` `<Button>` | `KfButton` | `<kf-button>` | `.kf-button` | `.kb-button` |
+| `import Icon from '@/components/ui/Icon.vue'` `<Icon>` | `KfIcon` | `<kf-icon>` | `.kf-icon` | `.kb-icon` |
+| `import Input from '@/components/ui/Input.vue'` `<Input>` | `KfInput` | `<kf-input>` | `.kf-input` | `.kb-field` / `.kb-input` |
+| `import Checkbox from '@/components/ui/Checkbox.vue'` `<Checkbox>` | `KfCheckbox` | `<kf-checkbox>` | `.kf-checkbox` | `.kb-checkbox*` |
+| `import FormField from '@/components/ui/FormField.vue'` `<FormField>` | `KfFormField`（内部） | `<kf-form-field>` | `.kf-form-field` | `.kb-field-*` |
+
+原项目**仍在使用**上表左列（`frontend/src` 中 326 处 import），本次不做替换；替换需单独排期与全量回归。

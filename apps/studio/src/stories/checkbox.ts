@@ -9,8 +9,20 @@ export const checkboxStory: ComponentStory = {
   description:
     '20×20 正方形复选框，3px 微圆角、品牌蓝选中、白色 Check，无默认灰色外围阴影。原生 input 承担键盘与表单语义，焦点环只画在可见方框上。',
   sourcePath: 'packages/ui/src/components/checkbox/KfCheckbox.vue',
-  measureSelector: '.kf-checkbox-box',
+  measureSelector: '.kf-checkbox__box',
   migratedFrom: 'frontend/src/components/ui/Checkbox.vue',
+  naming: {
+    js: 'KfCheckbox',
+    tag: '<kf-checkbox>',
+    css: '.kf-checkbox / __box / __mark / --disabled',
+    types: 'KfCheckboxProps / KfCheckboxEmits',
+  },
+  events: [
+    { name: 'update:modelValue', payload: 'T', description: 'v-model 值变化（默认 boolean）' },
+    { name: 'change', payload: 'boolean', description: '选中态变化后的布尔值' },
+    { name: 'native-change', payload: 'Event', description: '原生 change 事件（需要原始 target 时使用）' },
+  ],
+  slots: [{ name: 'default', description: '标签内容，优先于 label prop' }],
   props: [
     { name: 'modelValue', control: 'boolean', defaultValue: true, description: 'v-model 布尔值' },
     { name: 'label', control: 'text', defaultValue: '接收每周学习报告', description: '标签文本（整行可点）' },

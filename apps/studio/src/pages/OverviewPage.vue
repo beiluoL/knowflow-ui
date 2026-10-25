@@ -13,6 +13,7 @@
         <span class="hero__chip">Vite Library Mode</span>
         <span class="hero__chip">Light / Dark</span>
         <span class="hero__chip">78 icons</span>
+        <span class="hero__chip">kf-* BEM</span>
       </div>
     </header>
 
@@ -73,9 +74,13 @@ const usage = `npm i @beiluol/knowflow-ui
 import { KfButton, KfInput, KfCheckbox, KfIcon } from '@beiluol/knowflow-ui'
 import '@beiluol/knowflow-ui/style.css'
 
+// 导入名用 PascalCase，模板标签可用 kebab-case
 <KfButton icon-name="check" @click="save">保存</KfButton>
-<KfInput v-model="email" label="邮箱" placeholder="you@example.com" />
-<KfCheckbox v-model="agree" label="同意条款" />`
+<kf-input v-model="email" label="邮箱" placeholder="you@example.com" />
+<kf-checkbox v-model="agree" label="同意条款" />
+
+// 需要全局 kebab 标签时（可选）：
+// app.use(KfPlugin)  →  所有 <kf-*> 标签无需再单独 import`
 
 function go(id: string) {
   emit('navigate', id)

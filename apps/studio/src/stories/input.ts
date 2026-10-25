@@ -21,8 +21,20 @@ export const inputStory: ComponentStory = {
   description:
     '单行文本输入。浅灰表面 44px 高，默认无边框、聚焦不出现蓝色或灰色外框；label / help / error 通过 id + aria-describedby 关联，输入法组合期间不打断用户。',
   sourcePath: 'packages/ui/src/components/input/KfInput.vue',
-  measureSelector: '.kf-field',
+  measureSelector: '.kf-input',
   migratedFrom: 'frontend/src/components/ui/Input.vue',
+  naming: {
+    js: 'KfInput',
+    tag: '<kf-input>',
+    css: '.kf-input / __control / __icon / --error',
+    types: 'KfInputProps / KfInputEmits',
+  },
+  events: [
+    { name: 'update:modelValue', payload: 'string', description: '输入变化；输入法组合期结束后才同步' },
+    { name: 'focus', payload: 'FocusEvent', description: '原生聚焦' },
+    { name: 'blur', payload: 'FocusEvent', description: '原生失焦' },
+  ],
+  slots: [],
   props: [
     { name: 'label', control: 'text', defaultValue: '邮箱地址', description: '字段标签（同时关联 label for）' },
     { name: 'modelValue', control: 'text', defaultValue: '', description: 'v-model 值' },

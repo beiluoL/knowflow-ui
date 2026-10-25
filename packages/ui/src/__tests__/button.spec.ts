@@ -89,4 +89,34 @@ describe('KfButton', () => {
     const lg = mount(KfButton, { props: { iconName: 'check', size: 'lg' }, slots: { default: 'x' } })
     expect(lg.get('.kf-button__icon svg').attributes('width')).toBe('18')
   })
+
+  /**
+   * props/emits 从 types.ts 导入后仍必须生成运行时 emits 声明。
+   * 若 emit 未声明，父级 onClick 会落进 attrs 并作为原生监听器再触发一次，
+   * 同时绕过 disabled/loading 守卫 —— 这里用调用次数把该回归钉死。
+   */
+  it('click 只触发一次（emits 已在运行时声明，不重复冒泡）', async () => {
+    const onClick = vi.fn()
+    const wrapper = mount(KfButton, { props: { onClick }, slots: { default: '确定' } })
+    await wrapper.trigger('click')
+    expect(onClick).toHaveBeenCalledTimes(1)
+  })
+
+  it('禁用/加载态即使被点击也不触发 click', async () => {
+    const onDisabled = vi.fn()
+    const disabled = mount(KfButton, {
+      props: { disabled: true, onClick: onDisabled },
+      slots: { default: '确定' },
+    })
+    await disabled.trigger('click')
+    expect(onDisabled).not.toHaveBeenCalled()
+
+    const onLoading = vi.fn()
+    const loading = mount(KfButton, {
+      props: { loading: true, onClick: onLoading },
+      slots: { default: '保存' },
+    })
+    await loading.trigger('click')
+    expect(onLoading).not.toHaveBeenCalled()
+  })
 })

@@ -34,46 +34,20 @@
 
 <script setup lang="ts">
 import KfIcon from '../icon/KfIcon.vue'
-import type { BuiltinIconName } from '../icon/registry'
-import type { ButtonSize, ButtonVariant } from './types'
+import type { KfButtonEmits, KfButtonProps } from './types'
 
-const props = withDefaults(
-  defineProps<{
-    /** 视觉变体。ghost 与 outline 在本库中同义（沿用 KnowFlow 历史契约） */
-    variant?: ButtonVariant
-    /** sm 32px / md 38px / lg 44px */
-    size?: ButtonSize
-    /** 原生 button type */
-    type?: 'button' | 'submit' | 'reset'
-    disabled?: boolean
-    /** 加载态：禁用点击并显示旋转图标 */
-    loading?: boolean
-    /** 撑满容器宽度 */
-    block?: boolean
-    /** 前置/后置图标名 */
-    iconName?: BuiltinIconName | (string & {})
-    /** 仅图标按钮：正方形，必须提供 ariaLabel */
-    iconOnly?: boolean
-    /** 可访问名称（iconOnly 时必填） */
-    ariaLabel?: string
-    /** 原生 title 提示 */
-    title?: string
-    /** 图标位置 */
-    iconPosition?: 'left' | 'right'
-  }>(),
-  {
-    variant: 'primary',
-    size: 'md',
-    type: 'button',
-    disabled: false,
-    loading: false,
-    block: false,
-    iconOnly: false,
-    iconPosition: 'left',
-  },
-)
+const props = withDefaults(defineProps<KfButtonProps>(), {
+  variant: 'primary',
+  size: 'md',
+  type: 'button',
+  disabled: false,
+  loading: false,
+  block: false,
+  iconOnly: false,
+  iconPosition: 'left',
+})
 
-const emit = defineEmits<{ click: [event: MouseEvent] }>()
+const emit = defineEmits<KfButtonEmits>()
 
 function onClick(event: MouseEvent) {
   if (props.disabled || props.loading) {

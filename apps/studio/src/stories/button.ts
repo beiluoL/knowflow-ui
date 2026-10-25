@@ -22,6 +22,14 @@ export const buttonStory: ComponentStory = {
   sourcePath: 'packages/ui/src/components/button/KfButton.vue',
   measureSelector: '.kf-button',
   migratedFrom: 'frontend/src/components/ui/Button.vue',
+  naming: {
+    js: 'KfButton',
+    tag: '<kf-button>',
+    css: '.kf-button / __icon / __label / --primary',
+    types: 'KfButtonProps / KfButtonEmits',
+  },
+  events: [{ name: 'click', payload: 'MouseEvent', description: '点击；disabled 或 loading 时不触发' }],
+  slots: [{ name: 'default', description: '按钮文本；iconOnly 为 true 时不渲染' }],
   props: [
     {
       name: 'variant',

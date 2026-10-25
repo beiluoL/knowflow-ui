@@ -3,6 +3,41 @@
 版本遵循 [SemVer](https://semver.org/lang/zh-CN/)。当前仍处于 `0.x`，任何 minor 都可能含破坏性调整，
 但每次都会在此写明升级步骤。
 
+## [Unreleased] — 命名规范统一与工程收口（2026-10-25）
+
+> `0.1.0` 从未发布到 npm，因此本节的类名调整**不构成对外破坏性变更**；已发布版本发布时直接从净化后的命名开始。
+
+### 新增
+
+- `KfXxxProps` / `KfXxxEmits` 类型导出：`KfButtonProps`、`KfButtonEmits`、`KfIconProps`、
+  `KfInputProps`、`KfInputEmits`、`KfCheckboxProps<T>`、`KfCheckboxEmits<T>`，以及 `KfXxxSlots`（文档用）。
+- `KfPlugin` 全局注册插件 + `KF_COMPONENTS` / `KF_TAGS`：`app.use(KfPlugin)` 后
+  `<kf-button>` / `<kf-icon>` / `<kf-input>` / `<kf-checkbox>` 均可直接解析；`<KfButton>` 同样有效。
+- 每个组件目录新增 `index.ts`，新增 `components/index.ts` 聚合层与 `installer.ts`。
+- 测试：`naming.spec.ts`（11 项命名守门）、`plugin.spec.ts`（12 项注册/标签解析/共存），
+  单测总数 42 → **67**。
+- 文档：`NAMING_CONVENTIONS.md`、`NAMING_MIGRATION_REPORT.md`；Studio 新增「命名与 API」区块
+  （JS 名 / 模板标签 / CSS 类名 / 导出类型 / Events / Slots）。
+- `check-dist` 新增断言：BEM 类名、类型导出、运行时 `emits` 声明、无裸元素选择器。
+
+### 变更（内部 CSS 类名，对齐 BEM）
+
+| 旧 | 新 |
+| --- | --- |
+| `.kf-field` / `--error` / `--disabled` / `--readonly` | `.kf-input` / `.kf-input--error` / `--disabled` / `--readonly` |
+| `.kf-field__icon` | `.kf-input__icon` |
+| `.kf-input`（原生 input） | `.kf-input__control` |
+| `.kf-checkbox-box` / `-box-mixed` / `-input` / `-mark` / `-check` / `-label` | `.kf-checkbox__box` / `__box--mixed` / `__input` / `__mark` / `__mark--check` / `__label` |
+| `.kf-form-label` / `-required` / `-help` / `-error` | `.kf-form-field__label` / `__required` / `__help` / `__error` |
+
+**视觉零变化**：仅重写选择器，未改任何属性值/DOM 结构；已用 Studio 浏览器回归逐项核对计算样式。
+
+### 升级步骤（若已基于旧类名自定义样式）
+
+1. 按上表替换自己的覆盖规则；
+2. 若原本用 `KfXxx` 内联 props 类型做包装，改为 `import type { KfXxxProps } from '@beiluol/knowflow-ui'`；
+3. 若在模板里直接写 `<kf-button>` 之前不生效，现在可以 `app.use(KfPlugin)`（或继续按需 import）。
+
 ## [0.1.0] — 2026-10-25
 
 首个可独立安装的版本。只封装 4 个基础组件，用于验证「提取 → 解耦 → 构建 → 预览 → 安装」全链路。

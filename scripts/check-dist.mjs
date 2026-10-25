@@ -77,14 +77,54 @@ if (exists('style.css')) {
   for (const token of ['--kf-primary', '--kf-button-height-md', '--kf-checkbox-size']) {
     if (!css.includes(token)) problems.push(`dist/style.css 缺少令牌 ${token}`)
   }
+
+  // 命名规范：kf- 命名空间 + BEM（block__element / block--modifier）
+  for (const selector of ['.kf-button', '.kf-button__icon', '.kf-button--primary', '.kf-checkbox__box']) {
+    if (!css.includes(selector)) problems.push(`dist/style.css 缺少类 ${selector}`)
+  }
+  const legacyClasses = ['.kf-field{', '.kf-field ', '.kf-field:', '.kf-checkbox-box', '.kf-checkbox-label', '.kf-form-error', '.kf-form-help']
+  for (const legacy of legacyClasses) {
+    if (css.includes(legacy)) problems.push(`dist/style.css 残留非 BEM 类名 ${legacy}`)
+  }
+  if (/\.kb-[a-z]/.test(css)) problems.push('dist/style.css 出现旧命名空间 .kb- 类名')
+
+  // 与第三方库共存的结构性前提：不存在裸元素选择器
+  const bareElement = /(^|\})\s*(button|input|label|svg|img|span|div|a)\s*[,{]/
+  if (bareElement.test(css)) problems.push('dist/style.css 存在裸元素选择器（会命中 Element Plus 等第三方组件）')
+
   notes.push(`dist/style.css ${(Buffer.byteLength(css) / 1024).toFixed(1)} kB`)
 }
 
-// 类型入口必须真实指向组件声明
+// 类型入口必须真实指向组件声明，并导出规范化的 Props/Emits 类型
 if (exists('index.d.ts')) {
   const dts = fs.readFileSync(path.join(dist, 'index.d.ts'), 'utf8')
-  for (const symbol of ['KfButton', 'KfIcon', 'KfInput', 'KfCheckbox']) {
+  for (const symbol of [
+    'KfButton',
+    'KfIcon',
+    'KfInput',
+    'KfCheckbox',
+    'KfButtonProps',
+    'KfButtonEmits',
+    'KfIconProps',
+    'KfInputProps',
+    'KfInputEmits',
+    'KfCheckboxProps',
+    'KfCheckboxEmits',
+    'KfPlugin',
+  ]) {
     if (!dts.includes(symbol)) problems.push(`dist/index.d.ts 未导出 ${symbol}`)
+  }
+  // 注释里提到内部组件名是允许的，只有真正的 export 语句才算泄漏
+  if (/export\s+(type\s+)?\{[^}]*\bKfFormField\b/.test(dts)) {
+    problems.push('dist/index.d.ts 导出了内部组件 KfFormField')
+  }
+}
+
+// 运行时 emits 声明：类型从 types.ts 导入后仍必须生成，否则监听器会二次落进 attrs
+if (fs.existsSync(entry)) {
+  const code = fs.readFileSync(entry, 'utf8')
+  for (const emitName of ['click', 'update:modelValue', 'native-change']) {
+    if (!code.includes(`"${emitName}"`)) problems.push(`dist/index.js 缺少运行时 emits 声明 ${emitName}`)
   }
 }
 

@@ -9,7 +9,7 @@ describe('KfCheckbox', () => {
     expect(root.element.tagName).toBe('LABEL')
     const input = wrapper.get('input[type="checkbox"]')
     expect(root.attributes('for')).toBe(input.attributes('id'))
-    expect(wrapper.get('.kf-checkbox-label').text()).toBe('同意条款')
+    expect(wrapper.get('.kf-checkbox__label').text()).toBe('同意条款')
   })
 
   it('v-model 未选中时 input 不 checked；选中时 checked', () => {
@@ -36,9 +36,9 @@ describe('KfCheckbox', () => {
     const input = wrapper.get('input')
     expect((input.element as HTMLInputElement).indeterminate).toBe(true)
     expect(input.attributes('aria-checked')).toBe('mixed')
-    expect(wrapper.get('.kf-checkbox-box').classes()).toContain('kf-checkbox-box-mixed')
+    expect(wrapper.get('.kf-checkbox__box').classes()).toContain('kf-checkbox__box--mixed')
     // 半选态显示 minus 而不是 check
-    expect(wrapper.find('.kf-checkbox-mark').exists()).toBe(true)
+    expect(wrapper.find('.kf-checkbox__mark').exists()).toBe(true)
   })
 
   it('disabled 时不派发更新，并渲染禁用类', async () => {
@@ -90,6 +90,6 @@ describe('KfCheckbox', () => {
 
   it('无 label 且无插槽时不渲染标签节点', () => {
     const wrapper = mount(KfCheckbox, { props: { modelValue: false } })
-    expect(wrapper.find('.kf-checkbox-label').exists()).toBe(false)
+    expect(wrapper.find('.kf-checkbox__label').exists()).toBe(false)
   })
 })
